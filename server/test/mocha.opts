@@ -1,0 +1,2 @@
+--require /Users/Mango/Desktop/Freelancer/server/test/helpers
+    --reporter spec
