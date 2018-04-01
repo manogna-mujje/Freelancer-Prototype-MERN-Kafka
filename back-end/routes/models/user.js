@@ -16,6 +16,12 @@ var User = mongoose.model('User', {
     lastName: {
         type: String
     },
+    location: {
+        type: String
+    },
+    country: {
+        type: String
+    },
     img: {
         data: Buffer, 
         contentType: String

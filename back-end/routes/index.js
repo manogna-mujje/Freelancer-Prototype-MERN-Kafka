@@ -1,4 +1,5 @@
 var express = require('express');
+var path = require("path");
 var {User} = require('./models/user');
 var {Project} = require('./models/project');
 var {Bid} = require('./models/bid');
@@ -48,9 +49,6 @@ router.post('/login', function(req, res, next){
 
 /* Update a user profile */
 router.post('/updateProfile', function(req, res, next){
-  console.log(req.session);
-  console.log(req.session.user);
-  // console.log(`Input Country: ` + `${JSON.stringify(req.body.country)}`);
   User.findOneAndUpdate(
     { username: req.session.user  }, 
     { $set: {
@@ -64,75 +62,22 @@ router.post('/updateProfile', function(req, res, next){
       if(err) {
         res.status(400).send(err);
       }
-      // console.log(`Updated Document: ` + `${doc}`);
       res.status(200).send(doc);
     } )
-
-
-  // User.findOne({username: req.session.user}, (err, doc) => {
-  //   console.log(`Existing Document: ` + `${doc}`);
-  //   console.log(`Requested Body: ` + `${JSON.stringify(req.body)}`);
-  //   console.log(`country: ` + `${JSON.stringify(req.body.country)}`);
-  //   doc.location = req.body.location,
-  //   doc.country = req.body.country,
-  //   doc.firstName = req.body.firstName,
-  //   doc.lastName = req.body.lastName,
-  //   doc.phone = req.body.phone,
-  //   console.log(`About to update Document: ` + `${doc.location}`);
-
-  //   // // console.log(req);
-  //   // doc.img.data = req.files.picture,
-  //   // doc.img.contentType = 'image/jpg';
-  //   doc.save().then((doc) => {
-  //     console.log(`Updated Document: ` + `${doc.location}`);
-  //     res.status(200).send(doc);
-  //   }, (e) => {
-  //     res.status(400).send(e);
-  //   });
-  // })
-// ------------------------------------------------------------------------------- //
-
-  // var newUser = new User({
-  //   // email: req.body.email,
-  //   firstName: req.body.firstName,
-  //   lastName: req.body.lastName,
-  //   location: req.body.location,
-  //   country: req.body.country,
-  //   phone: req.body.phone
-  // });
-  // newUser.img.data = fs.readFileSync(imgPath);
-  // newUser.img.contentType = 'image/jpg';
-  // newUser.save().then((doc) => {
-  //   res.status(200).send(doc);
-  // }, (e) => {
-  //   res.status(400).send(e);
-  // });
 });
 
 
-/* Upload a file */
+/* Upload a profile picture */
 router.post('/upload', function(req, res, next){
   console.log('Upload API hit');
-  console.log(req.session);
-  console.log(req.session.user);
-  console.log('read file:');
-  console.log(req.files.file);
-  User.findOne({username: req.session.user}, (err, doc) => {
-    if(doc) {
-      doc.img.data = req.files.file.data;
-      doc.img.contentType = 'image/jpg';
-      doc.save().then((doc) => {
-        console.log(doc);
-        res.status(200).send(doc);
-      }, (e) => {
-        res.status(400).send(e);
-      });
-    } else if(err) {
-      console.log(err);
+  let imageFile = req.files.file;
+  imageFile.mv(path.join(`${__dirname}`, '..' , 'public' , `${req.session.user}` + '.jpg'), function(err) {
+    if (err) {
+      return res.status(500).send(err);
     }
-  })
+    res.json({file: `public/${req.body.filename}.jpg`});
+  });
 });
-
 
 
 /* Post a new Project */
@@ -225,7 +170,11 @@ router.get('/logout', function(req, res, next) {
 
 module.exports = router;
 
+
+//  ---------------------------------------------------------------------------------------------
+
 /* Signup API without Kafka */
+
 // var newUser = new User({
   //   email: req.body.email,
   //   username: req.body.username,
@@ -236,3 +185,64 @@ module.exports = router;
   // }, (e) => {
   //   res.status(400).send(e);
   // });
+
+  /* Upload Image to database API  */
+
+  // User.findOne({username: req.session.user}, (err, doc) => {
+  //   if(doc) {
+  //     doc.img.data = req.files.file.data;
+  //     doc.img.contentType = 'image/jpg';
+  //     doc.save()
+  //     .then((doc) => {
+  //       console.log(doc);
+  //       res.status(200).send(doc);
+  //     }, (e) => {
+  //       res.status(400).send(e);
+  //     });
+  //   } else if(err) {
+  //     console.log(err);
+  //   }
+  // })
+
+
+  /* Back up */
+
+  // User.findOne({username: req.session.user}, (err, doc) => {
+  //   console.log(`Existing Document: ` + `${doc}`);
+  //   console.log(`Requested Body: ` + `${JSON.stringify(req.body)}`);
+  //   console.log(`country: ` + `${JSON.stringify(req.body.country)}`);
+  //   doc.location = req.body.location,
+  //   doc.country = req.body.country,
+  //   doc.firstName = req.body.firstName,
+  //   doc.lastName = req.body.lastName,
+  //   doc.phone = req.body.phone,
+  //   console.log(`About to update Document: ` + `${doc.location}`);
+
+  //   // // console.log(req);
+  //   // doc.img.data = req.files.picture,
+  //   // doc.img.contentType = 'image/jpg';
+  //   doc.save().then((doc) => {
+  //     console.log(`Updated Document: ` + `${doc.location}`);
+  //     res.status(200).send(doc);
+  //   }, (e) => {
+  //     res.status(400).send(e);
+  //   });
+  // })
+
+
+  // var newUser = new User({
+  //   // email: req.body.email,
+  //   firstName: req.body.firstName,
+  //   lastName: req.body.lastName,
+  //   location: req.body.location,
+  //   country: req.body.country,
+  //   phone: req.body.phone
+  // });
+  // newUser.img.data = fs.readFileSync(imgPath);
+  // newUser.img.contentType = 'image/jpg';
+  // newUser.save().then((doc) => {
+  //   res.status(200).send(doc);
+  // }, (e) => {
+  //   res.status(400).send(e);
+  // });
+  //  ---------------------------------------------------------------------------------------------

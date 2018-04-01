@@ -45,11 +45,11 @@ app.use(passport.session());
 
 //Cross-Origin connection
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", '*');
-  // res.header("Access-Control-Allow-Origin", 'http://localhost:8080');
-  // res.header("Access-Control-Allow-Credentials", "true");
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  // res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+  // res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Origin", 'http://localhost:8080');
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
   next();
 });
 
@@ -59,7 +59,7 @@ app.use(cors({
 }));
 
 app.use(fileUpload());
-
+app.use('/public', express.static(__dirname + '/public'));
 app.use('/', index);
 
 // catch 404 and forward to error handler
