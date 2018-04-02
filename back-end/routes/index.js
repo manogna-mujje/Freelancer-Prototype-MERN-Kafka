@@ -6,9 +6,8 @@ var {Bid} = require('./models/bid');
 var passport = require('passport');
 require('./passport-login')(passport);
 require('./passport-signup')(passport);
-var imgPath = '/Users/Mango/Desktop/fall.jpg';
 var router = express.Router();
-var fs = require('fs');
+var kafka = require('./kafka/client');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -49,21 +48,39 @@ router.post('/login', function(req, res, next){
 
 /* Update a user profile */
 router.post('/updateProfile', function(req, res, next){
-  User.findOneAndUpdate(
-    { username: req.session.user  }, 
-    { $set: {
-      location : req.body.location, 
-      country : req.body.country, 
-      firstName : req.body.firstName, 
-      lastName : req.body.lastName, 
-      phone : req.body.phone
-      }
-    }, (err, doc) => {
-      if(err) {
-        res.status(400).send(err);
-      }
-      res.status(200).send(doc);
-    } )
+  kafka.make_request('update-profile',{
+    "user": req.session.user,
+    "location" : req.body.location, 
+    "country" : req.body.country, 
+    "firstName" : req.body.firstName, 
+    "lastName" : req.body.lastName, 
+    "phone" : req.body.phone
+  }, function(err,results){
+    console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
+  });
+
+  // User.findOneAndUpdate(
+  //   { username: req.session.user  }, 
+  //   { $set: {
+  //     location : req.body.location, 
+  //     country : req.body.country, 
+  //     firstName : req.body.firstName, 
+  //     lastName : req.body.lastName, 
+  //     phone : req.body.phone
+  //     }
+  //   }, (err, doc) => {
+  //     if(err) {
+  //       res.status(400).send(err);
+  //     }
+  //     res.status(200).send(doc);
+  //   } )
 });
 
 
@@ -187,6 +204,9 @@ module.exports = router;
   // });
 
   /* Upload Image to database API  */
+
+  // var imgPath = '/Users/Mango/Desktop/fall.jpg';
+  // var fs = require('fs');
 
   // User.findOne({username: req.session.user}, (err, doc) => {
   //   if(doc) {

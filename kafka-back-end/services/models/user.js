@@ -16,9 +16,6 @@ var User = mongoose.model('User', {
     lastName: {
         type: String
     },
-    dob: {
-        type: String
-    },
     location: {
         type: String
     },

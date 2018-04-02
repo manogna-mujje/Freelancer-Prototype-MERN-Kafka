@@ -17,8 +17,8 @@ function KafkaRPC(){
 /* Make request to a topic */
 
 KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
-
-    var response_topic_name = topic_name+'_response';
+    console.log('kafka_make_request with topic_name:' + topic_name);
+    var response_topic_name = topic_name +'_response';
     self = this;
  
     //generate a unique correlation id for this call
@@ -45,12 +45,17 @@ KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
 
     //create response topic
     self.producer.createTopics([response_topic_name], false, function (err, data) {
-        console.log('Topic created: ' + data);
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Response Topic created: ' + data);
+        }
     });
 
     //make sure we have a response topic
-    self.setupResponseQueue(self.producer,topic_name,function(){
-        console.log('Response Queue');
+    self.setupResponseQueue(self.producer, topic_name, function(){
+
+        self.response_queue = false;
         //put the request on a topic
 
         var payloads = [
