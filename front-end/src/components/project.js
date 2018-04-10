@@ -31,6 +31,8 @@ class Project extends Component {
     handleClick(event){
         console.log(event);
         if(event.target.id === 'bids-button') {
+            console.log('Bids Details:')
+            console.log(this.props.bids);
             this.props.bidsTabClick(this.props.match.params.name);
             setTimeout(()=>{
                 document.getElementById('Bids').style.display = "block";
@@ -78,7 +80,6 @@ class Project extends Component {
                        <i> Skills: </i>  <br/> {this.state.skills} <br/> <br/>
                        <i> Status: </i> <br/> {this.state.status} <br/>
                     </div>
-
                 </div>
             </div>
         );

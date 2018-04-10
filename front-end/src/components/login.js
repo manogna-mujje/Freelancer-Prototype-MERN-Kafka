@@ -17,7 +17,6 @@ class Login extends Component {
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleOutput = this.handleOutput.bind(this); 
     }
 
     componentDidMount(){
@@ -35,8 +34,17 @@ class Login extends Component {
     }
 
     handleSubmit(event){
-        setTimeout(this.handleOutput, 1000);
-        this.props.loginAccount(this.state.username, this.state.password);
+        this.props.loginAccount(this.state.username, this.state.password).then((data)=> {
+            // console.log(data);
+            // console.log(this.props.loginOutput.isFulfilled);
+            if(this.props.loginOutput.isFulfilled){
+                    this.props.history.push({
+                        pathname: '/profile/' + this.props.loginOutput.username
+                    })
+            } else {
+                document.getElementById('error-message').style.display = "block";
+            }
+        });
         event.preventDefault();
     }
 
@@ -53,22 +61,6 @@ class Login extends Component {
                 });
                 break;   
         }
-    }
-
-    handleOutput(){
-        setTimeout(()=> {
-            console.log(this.props.loginOutput.isFulfilled);
-        if(this.props.loginOutput.isFulfilled){
-            console.log(this.props);
-            setTimeout(()=> {
-                this.props.history.push({
-                    pathname: '/profile/' + this.props.loginOutput.username
-                })
-            }, 1000);
-        } else {
-            document.getElementById('error-message').style.display = "block";
-        }
-        }, 1000)
     }
 
     render() {

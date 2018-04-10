@@ -144,14 +144,11 @@ router.get('/showProjects', function(req, res, next){
         res.send(results.value).status(results.code);
       }
     });
-  } else {
-    console.log('else blcok')
-    res.redirect('/login');
-  }
+  } 
 });
 
 /* List all Bids for a particular project */
-router.get('/showBids', function(req, res, next){
+router.post('/showBids', function(req, res, next){
   kafka.make_request('showBids',{
     projectName : req.body.projectName
   }, function(err,results){
@@ -181,7 +178,8 @@ router.post('/showProjectDetails', function(req, res, next) {
   console.log(req.body.project);
   if (req.isAuthenticated()) {
     kafka.make_request('anyRequest',{
-      username: req.session.passport.user
+      username: req.session.passport.user,
+      project : req.body.project
     }, function(err,results){
       console.log('In Kafka: %o', results.value);
         if(err){
@@ -206,7 +204,6 @@ router.post('/showProjectDetails', function(req, res, next) {
 
 router.get('/checkSession', function(req, res, next){
   console.log('Check Session API hit.')
-  console.log(req.session);
   if(req.isAuthenticated()) {
     console.log('Session existing')
     res.status(200).json({user: req.session.passport.user});
@@ -223,7 +220,6 @@ router.get('/logout', function(req, res, next) {
   console.log('Logout API hit.');
   if (req.isAuthenticated()) {
     req.logOut();
-    console.log(req.session);
     res.status(200).send('Logout success');
   } else {
     res.status(400).send('Already logged out.');

@@ -22,6 +22,13 @@ class Signup extends Component {
         var password = document.getElementById('id-password').value;
 
         API.validateSignup(email, username, password, this);
+        setTimeout(()=>{
+            if(this.state.signedUp){
+                this.props.history.push({
+                    pathname: '/profile/' + username
+                })
+            }
+        },800);
         event.preventDefault();
     }
     

@@ -31,11 +31,11 @@ MongoClient.connect(mongoURL, function (err, db) {
     }
 });
 
-consumer.commit(function(err, data) {
-    if(err)
-        console.log(err);
-    console.log(data);
-});
+// consumer.commit(function(err, data) {
+//     if(err)
+//         console.log(err);
+//     console.log(data);
+// });
 
 // Add additional topics
 consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'postBid', 'anyRequest'], function (err, added) {

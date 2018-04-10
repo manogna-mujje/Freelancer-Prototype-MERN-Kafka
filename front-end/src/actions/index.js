@@ -35,9 +35,12 @@ export const loginAccount = (username, password) => ({
 	type: 'LOGIN_ACCOUNT',
 	meta: {user: username},
 	payload: new Promise(resolve => {
-	  setTimeout(() => API.validateLogin(username, password).then(response => {
-		resolve(response.status);
-	  }), 500);
+	//   setTimeout(() => API.validateLogin(username, password).then(response => {
+	// 	resolve(response.status);
+	//   }), 50);
+		API.validateLogin(username, password).then(response => {
+			resolve(response.status);
+		})
 	})
 });
 

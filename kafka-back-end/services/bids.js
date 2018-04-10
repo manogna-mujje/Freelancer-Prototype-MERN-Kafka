@@ -1,5 +1,3 @@
-// var {Bid} = require('./models/bid');
-
 function handle_request(msg, callback){
     var res = {};
     console.log("In handle request:"+ JSON.stringify(msg));
