@@ -1,5 +1,3 @@
-// import { exists } from 'fs';
-
 var express = require('express');
 var path = require("path");
 var {User} = require('./models/user');
@@ -45,8 +43,6 @@ router.post('/login', function(req, res, next){
         if(err)
           return next(err);
       });
-      // req.session.user = user.username;
-      // console.log("Session initilized by "+ req.session.user);
      return res.status(200).send('Login successful');
     }
 })(req, res);
@@ -56,11 +52,11 @@ router.post('/login', function(req, res, next){
 /* Update a user profile */
 router.post('/updateProfile', function(req, res, next){
   console.log('Update profile hit');
-  if(!req.session.user){
+  if(!req.isAuthenticated()){
     res.status(401).send('Login unauthorized');
   }
   kafka.make_request('profileUpdate',{
-    "user": req.session.user,
+    "user": req.session.passport.user,
     "location" : req.body.location, 
     "country" : req.body.country, 
     "firstName" : req.body.firstName, 
@@ -83,7 +79,7 @@ router.post('/updateProfile', function(req, res, next){
 router.post('/upload', function(req, res, next){
   console.log('Upload API hit');
   let imageFile = req.files.file;
-  imageFile.mv(path.join(`${__dirname}`, '..' , 'public' , `${req.session.user}` + '.jpg'), function(err) {
+  imageFile.mv(path.join(`${__dirname}`, '..' , 'public' , `${req.session.passport.user.username}` + '.jpg'), function(err) {
     if (err) {
       return res.status(500).send(err);
     }
@@ -96,7 +92,7 @@ router.post('/upload', function(req, res, next){
 router.post('/postProject', function(req, res, next){
   console.log('Post Project hit');
   kafka.make_request('postProject',{
-      "user": req.session.user,
+      "user": req.session.passport.user,
       "name": req.body.title,
       "description": req.body.description,
       "skills": req.body.skills,
@@ -137,7 +133,7 @@ router.post('/postBid', function(req, res, next){
 /* List all Projects */
 router.get('/showProjects', function(req, res, next){
   console.log('Show Projects API hit');
-  if (req.session && req.session.user) {
+  if (req.isAuthenticated()) {
     kafka.make_request('showProjects',{}, function(err,results){
     console.log('In Kafka: %o', results);
       if(err){
@@ -172,18 +168,6 @@ router.get('/showBids', function(req, res, next){
 
 /* Retrieve a profile */
 router.get('/profile', checkAuth(), function(req, res, next){
-  // kafka.make_request('profile',{
-  //   username: req.session.user
-  // }, function(err,results){
-  //   console.log('In Kafka: %o', results);
-  //     if(err){
-  //       res.send(err).status(results.code);
-  //     }
-  //     else
-  //     {
-  //       res.send(results).status(results.code);
-  //     }
-  //   });
     console.log('PROFILE API HIT');
     console.log(req.session.passport.user);
     res.json({user : req.session.passport.user}).status(200);
@@ -195,9 +179,9 @@ router.post('/showProjectDetails', function(req, res, next) {
   console.log('Show Project Details API hit.');
   console.log(req.session);
   console.log(req.body.project);
-  if (req.session && req.session.user) {
+  if (req.isAuthenticated()) {
     kafka.make_request('anyRequest',{
-      username: req.session.user
+      username: req.session.passport.user
     }, function(err,results){
       console.log('In Kafka: %o', results.value);
         if(err){
@@ -255,16 +239,6 @@ function checkAuth() {
       throw ('Session doesn\'t exist.')
     }
 }
-
-// function authPreCheck() {
-//   return(req, res, next) => {
-//     if(!req.isAuthenticated()) {
-//       return next();
-//     } else {
-//       res.json({user: req.session.passport.user})
-//     }
-//   }
-// }
 
 module.exports = router;
 

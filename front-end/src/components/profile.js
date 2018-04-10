@@ -83,7 +83,6 @@ class Profile extends Component {
     }
 
     render(){
-   
             return(
                 <div id= "profile">
                     <h1>Hello, {this.props.match.params.user}</h1>

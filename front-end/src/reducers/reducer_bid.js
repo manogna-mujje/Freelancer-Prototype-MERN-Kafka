@@ -1,5 +1,4 @@
 export default function (state = {}, action) {
-  console.log('reducer_bid')
     switch (action.type) {
       case 'BIDS_CLICK_FULFILLED':
       console.log('switch');

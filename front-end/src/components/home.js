@@ -126,17 +126,22 @@ class Home extends Component {
     constructor(props){
         super(props);
         this.state = {
+            user: '',
             projects: [],
             arrived: false
         }
     }
 
     componentDidMount(){
+        console.log('Comp Did Mount')
         this.props.checkSession().then((res)=> {
-            console.log(this.props.user);
+            this.setState({
+                user: this.props.user.user.firstName
+            })
         })
         API.showProjects().then((res) => {
             res.json().then((data) => {
+                console.log(data);
                 this.setState({
                     projects: data,
                     arrived: true
@@ -148,15 +153,15 @@ class Home extends Component {
     render(){
         return (
             <div>
-                <h1> Welcome back, {this.props.user} </h1>
+                <h1> Welcome back, {this.state.user} </h1>
                 <h2> Freelance Jobs and Contests </h2>
                 <p> <Link className="menu-button" id="post-project" to="/post-project">  Post a Project  </Link> </p> <br/>
                 <div> 
-                    { this.props.user && 
+                { this.props.user && 
                     this.state.arrived && 
                     <Search 
                     projects = {this.state.projects}
-                    user = {this.props.user}
+                    user = {this.props.user.user.username}
                     />
                     }
                 </div>
@@ -168,7 +173,7 @@ class Home extends Component {
 function mapStateToProps(state) {
     return {  
         isLoggedin: state.session.isLoggedin,
-        user: state.session.user
+        user: state.session
     };
 }
 
