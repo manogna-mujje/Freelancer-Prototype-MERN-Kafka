@@ -11,6 +11,7 @@ class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
+            user: "",
             username: "",
             password: ""
         }
@@ -20,14 +21,17 @@ class Login extends Component {
     }
 
     componentDidMount(){
-        console.log(this.props.checkSession());
-        this.props.checkSession().then((res) => {
-            console.log('compDidMount');
-            console.log(this.props.session.isLoggedin);
-            if(this.props.session.isLoggedin){
-                this.props.history.push('/profile/' + this.props.session.user);
-            }
-        })
+        API.checkSession().then((res) => {
+            res.json().then((body)=>{
+                if(body.error){
+                    console.log(body.error);
+                    return;
+                }
+                console.log(body);
+                this.setState({ user: body.user });
+                this.props.history.push('/profile/' + body.user.username);
+            })
+        });
     }
 
     handleSubmit(event){

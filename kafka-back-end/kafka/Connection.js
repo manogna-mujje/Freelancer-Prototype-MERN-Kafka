@@ -3,10 +3,20 @@ var kafka = require('kafka-node');
 function ConnectionProvider() {
     this.getConsumer = function(topic_name) {
         if (!this.kafkaConsumerConnection) {
-
             this.client = new kafka.Client("localhost:2181");
-            this.kafkaConsumerConnection = new kafka.Consumer(this.client,[ { topic: topic_name, partition: 0 }]);
+            this.kafkaConsumerConnection = new kafka.Consumer(this.client,
+                [ { topic: topic_name, partition: 0 }], {fromOffset: false, autoCommit: true}
+                );
+            // offset = new kafka.Offset(this.client);
             this.client.on('ready', function () { console.log('Kafka backend client ready!') })
+            // offset.fetch([
+            //     { topic: 'Admission', partition: 0, time: Date.now(), maxNum: 1 }
+            // ], function (err, data) {
+            //     if(err)
+            //         console.log(err);
+            //     // data
+            //     console.log(data);
+            // });
         }
         return this.kafkaConsumerConnection;
     };

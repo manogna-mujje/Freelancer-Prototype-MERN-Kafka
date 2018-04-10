@@ -1,22 +1,21 @@
-var {User} = require('./models/user');
-var {Project} = require('./models/project');
-var {Bid} = require('./models/bid');
 
-function handle_request(msg, callback){
+function handle_request(msg, collection, callback){
     var res = {};
     console.log("In handle request:"+ JSON.stringify(msg));
-    User.find({username: msg.username}).then((doc) => {
-        console.log(doc[0].username);
-        if(msg.username == doc[0].username && msg.password == doc[0].password){
-            res.code = "200";
-            res.value = "Success Login";
-        }
-        else{
-            res.code = "401";
-            res.value = "Failed Login";
-        }
-      });
+    collection.find({username: msg.username}).toArray((err, doc) => {
+      if (err) {
+        console.log(err);
+        res.code = "400";
+        res.value = "Failed Login";
+        return;
+      }
+      if(msg.username == doc[0].username && msg.password == doc[0].password)
+          res.code = "200";
+          res.user = doc[0];
+          res.value = "Success Login";
+    })
       setTimeout(()=>{
+        console.log(`res: ${JSON.stringify(res)}`)
         callback(null, res);
       }, 500);
 }

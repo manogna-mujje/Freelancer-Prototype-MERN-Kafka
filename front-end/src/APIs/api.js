@@ -80,18 +80,15 @@ export const validateSignup = function (email, username, password, object){
 };
 
 
-export const profile = function (username){
+export const profile = function (){
     url = `${api}/profile`;
     return fetch(url, {
-              method: 'POST',
+              method: 'GET',
               headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
               },
-              credentials: 'include',
-              body: JSON.stringify({
-                  username: username
-              })
+              credentials: 'include'
             })
 };
 
@@ -120,6 +117,7 @@ export const checkSession = function (){
 };
 
 export const postProject = function (title, description, skills, owner, budget){
+    console.log('API name: ' + name);
     url = `${api}/postProject`;
     return fetch(url, {
               method: 'POST',
@@ -139,7 +137,7 @@ export const postProject = function (title, description, skills, owner, budget){
   };
 
 
-  export const postBid = function ( projectId, freelancerUsername, bidAmount, employerUsername){
+  export const postBid = function (project, freelancer, bidAmount, employer){
     url = `${api}/postBid`;
     return fetch(url, {
               method: 'POST',
@@ -149,10 +147,10 @@ export const postProject = function (title, description, skills, owner, budget){
               },
               credentials: 'include',
               body: JSON.stringify({
-                projectId, 
-                freelancerUsername, 
+                project,
+                freelancer, 
                 bidAmount, 
-                employerUsername
+                employer
               })
             }) 
   };

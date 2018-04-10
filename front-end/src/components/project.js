@@ -16,7 +16,7 @@ class Project extends Component {
             description: "",
             budget: "",
             skills: "",
-            status: ""
+            status: "open"
         }
         this.handleClick = this.handleClick.bind(this);
     }
@@ -27,10 +27,10 @@ class Project extends Component {
                 document.getElementById('Bids').style.display = "block";
             }, 1000);
     }
+
     handleClick(event){
         console.log(event);
         if(event.target.id === 'bids-button') {
-            console.log('Congrats');
             this.props.bidsTabClick(this.props.match.params.name);
             setTimeout(()=>{
                 document.getElementById('Bids').style.display = "block";
@@ -39,13 +39,14 @@ class Project extends Component {
             }, 1000);
         } else {
             this.props.detailsTabClick(this.props.match.params.name);
+            console.log('Props Details:')
+            console.log(this.props.details);
             setTimeout(()=>{
                 this.setState({
-                    projectID: JSON.parse(this.props.details.list)[0].PROJECTID,
-                    description: JSON.parse(this.props.details.list)[0].DESCRIPTION ,
-                    budget: JSON.parse(this.props.details.list)[0].ESTIMATEDBUDGET,
-                    skills: JSON.parse(this.props.details.list)[0].SKILLS,
-                    status: JSON.parse(this.props.details.list)[0].STATUS
+                    description: JSON.parse(this.props.details.list)[0].description,
+                    budget: JSON.parse(this.props.details.list)[0].budget,
+                    skills: JSON.parse(this.props.details.list)[0].skills
+                    // status: JSON.parse(this.props.details.list)[0].status
                 })
             }, 1000);
             setTimeout(()=>{
@@ -72,11 +73,10 @@ class Project extends Component {
                     </div>
                     <div id="Project-Details" className="tabcontent">
                     <br/>
-                       <i> Project ID: </i> <br/> {this.state.projectID} <br/>  <br/>
                        <i> Project Description: </i>  <br/> {this.state.description} <br/> <br/>
-                       <i>Estimated Budget: </i>  <br/> {this.state.budget} <br/> <br/>
-                       <i>Skills: </i>  <br/> {this.state.skills} <br/> <br/>
-                       <i>status: </i> <br/> {this.state.status} <br/>
+                       <i> Estimated Budget: </i>  <br/> {this.state.budget} <br/> <br/>
+                       <i> Skills: </i>  <br/> {this.state.skills} <br/> <br/>
+                       <i> Status: </i> <br/> {this.state.status} <br/>
                     </div>
 
                 </div>

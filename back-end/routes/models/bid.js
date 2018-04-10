@@ -7,7 +7,7 @@ var Bid = mongoose.model('Bid', {
     bidAmount: {
         type: Number
     },
-    biddingProjectName: {
+   ProjectName: {
         type: String
     }
 });

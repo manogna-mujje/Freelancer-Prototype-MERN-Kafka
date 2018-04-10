@@ -10,6 +10,7 @@ class Profile extends Component {
         this.state = {
             imageURL: '',
             message: '',
+            user: '',
             isEditable: false
           };
         this.handleClick = this.handleClick.bind(this);
@@ -19,14 +20,18 @@ class Profile extends Component {
     }
 
     componentDidMount(){
-       console.log(this.props.checkSession());
-        this.props.checkSession().then((res)=> {
-            console.log(res);
-            if(!this.props.isLoggedin || (this.props.match.params.user !== this.props.user)){
-                this.props.history.push('/login');
-            }
+        API.profile().then((res) => {
+            res.json().then((body)=>{
+                if(body.error){
+                    console.log(body.error);
+                    this.props.history.push('/login');
+                    return;
+                }
+                console.log(body.user);
+                this.setState({ user: body.user });
+                this.setState({ imageURL: `http://localhost:3001/public/${body.user.username}.jpg`});
+            })
         });
-        
     }
 
     handleUpload(){
@@ -78,37 +83,49 @@ class Profile extends Component {
     }
 
     render(){
-        console.log(this.props);
-        return(
-            <div id= "profile">
-                <h1>Hello, {this.props.match.params.user}</h1>
-                <button className="menu-button" id="logout" onClick={this.handleClick} > Logout </button>
-                <button className="menu-button" id="edit-profile" onClick={this.handleEdit} > Edit Profile </button>
-                <div id="profile-picture"> 
-                    <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
-                    <img id="pic" src={this.state.imageURL} alt="img" />
+   
+            return(
+                <div id= "profile">
+                    <h1>Hello, {this.props.match.params.user}</h1>
+                    <button className="menu-button" id="logout" onClick={this.handleClick} > Logout </button>
+                    <button className="menu-button" id="edit-profile" onClick={this.handleEdit} > Edit Profile </button>
+                    {(!this.state.isEditable) ?
+                        <div id = "viewable-profile"> 
+                            <img id="pic" src={this.state.imageURL} alt="img" />
+                            <p> First Name: {this.state.user.firstName}</p><br/>
+                            <p> Last Name: {this.state.user.lastName}</p><br/>
+                            <p> Location: {this.state.user.location}</p><br/>
+                            <p> Country: {this.state.user.country}</p><br/>
+                            <p> Phone: {this.state.user.phone}</p><br/>
+                        </div> :
+                        <div id = "editable-profile">  
+                            <div id="profile-picture"> 
+                                <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
+                                <img id="pic" src={this.state.imageURL} alt="img" />
+                            </div>
+                            <button id="upload-button" onClick={this.handleUpload}> 
+                                Upload
+                            </button>
+                            <form className="profile-form" onSubmit={this.handleSubmit}>
+                                <div id="fields"> 
+                                    <label> First Name </label> <br/>
+                                    <input type="text" ref="fname" placeholder="First Name" /><br/>
+                                    <label> Last Name </label><br/>
+                                    <input type="text" ref="lname" placeholder="Last Name" /><br/>
+                                    <label> Location </label><br/>
+                                    <input type="text" ref="location" placeholder="Location" /><br/>
+                                    <label> Country </label><br/>
+                                    <input type="text" ref="country" placeholder="Country" /><br/>
+                                    <label> Phone Number </label><br/>
+                                    <input type="text" ref="phone" placeholder="Phone Number" />
+                                </div>
+                                <input type="submit" />
+                            </form>
+                            <p id="update-response"> {this.state.message} </p>
+                        </div> 
+                    }
                 </div>
-                <button id="upload-button" onClick={this.handleUpload}> 
-                    Upload
-                </button>
-                <form className="profile-form" onSubmit={this.handleSubmit}>
-                    <div id="fields"> 
-                        <label> First Name </label> <br/>
-                        <input type="text" ref="fname" placeholder="First Name" /><br/>
-                        <label> Last Name </label><br/>
-                        <input type="text" ref="lname" placeholder="Last Name" /><br/>
-                        <label> Location </label><br/>
-                        <input type="text" ref="location" placeholder="Location" /><br/>
-                        <label> Country </label><br/>
-                        <input type="text" ref="country" placeholder="Country" /><br/>
-                        <label> Phone Number </label><br/>
-                        <input type="text" ref="phone" placeholder="Phone Number" />
-                    </div>
-                    <input type="submit" />
-                </form>
-                <p id="update-response"> {this.state.message} </p>
-            </div>
-        );
+            );
     }
 }
 

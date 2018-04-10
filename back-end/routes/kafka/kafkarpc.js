@@ -17,6 +17,7 @@ function KafkaRPC(){
 /* Make request to a topic */
 
 KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
+    console.log(`Kafkarpc-Content: ${JSON.stringify(content)}`);
     console.log('kafka_make_request with topic_name:' + topic_name);
     var response_topic_name = topic_name +'_response';
     self = this;
@@ -67,10 +68,14 @@ KafkaRPC.prototype.makeRequest = function(topic_name, content, callback){
         ];
         console.log('Check if producer is ready:');
         console.log(self.producer.ready);
+
+        console.log(payloads[0]);
+    
         self.producer.send(payloads, function(err, data){
             console.log('Producer sending');
-            if(err)
+            if(err){
                 console.log(err);
+            }
             console.log(data);
         });
     });

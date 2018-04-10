@@ -69,7 +69,10 @@ export const detailsTabClick = (project) => ({
 	payload: new Promise((resolve, reject) => {
 		API.showProjectDetails(project).then(response => {
 			console.log('resolving response');
-			  resolve(response.json());
+			response.json().then((data)=> {
+				console.log(data);
+				resolve(data);
+			})
 			  }).catch((err) => {
 				  reject(err);
 			  })

@@ -1,28 +1,29 @@
-var MongoClient = require('mongodb').MongoClient;
-var db;
+const MongoClient = require('mongodb').MongoClient;
 var connected = false;
+var db;
+var mongoURL = 'mongodb://localhost:27017/Freelancer';
 
+var connect = (callback) => {
+  MongoClient.connect(mongoURL, function (err, _db) {
+  if(err) {
+    console.log("Unable to connect to MongoDB server");
+  } else {
+    connected = true;
+    db = _db;
+    callback && callback(db);
+  }
+  db.close();
+  });
+}
 
-/**
- * Connects to the MongoDB Database with the provided URL
- */
-exports.connect = function(url, callback){
-    MongoClient.connect(url, function(err, _db){
-      if (err) { throw new Error('Could not connect: '+err); }
-      db = _db;
-      connected = true;
-      console.log(connected +" is connected?");
-      callback(db);
-    });
-};
+var collection = function (name){
+  if(!connected) {
+    console.log('Must connect to database first');
+  }
+  return db.collection(name);
+}
 
-/**
- * Returns the collection on the selected database
- */
-exports.collection = function(name){
-    if (!connected) {
-      throw new Error('Must connect to Mongo before calling "collection"');
-    } 
-    return db.collection(name);
-  
-};
+module.exports = {
+  connect,
+  collection
+}

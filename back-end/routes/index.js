@@ -1,3 +1,5 @@
+// import { exists } from 'fs';
+
 var express = require('express');
 var path = require("path");
 var {User} = require('./models/user');
@@ -39,16 +41,25 @@ router.post('/login', function(req, res, next){
     if(!user) {
         res.status(400).send('Login failed');
     } else {
-      req.session.user = user.username;
-      console.log("Session initilized by "+ req.session.user);
-      return res.status(200).send('Login successful');
+      req.logIn(user, (err)=> {
+        if(err)
+          return next(err);
+      });
+      // req.session.user = user.username;
+      // console.log("Session initilized by "+ req.session.user);
+     return res.status(200).send('Login successful');
     }
 })(req, res);
 });
 
+
 /* Update a user profile */
 router.post('/updateProfile', function(req, res, next){
-  kafka.make_request('update-profile',{
+  console.log('Update profile hit');
+  if(!req.session.user){
+    res.status(401).send('Login unauthorized');
+  }
+  kafka.make_request('profileUpdate',{
     "user": req.session.user,
     "location" : req.body.location, 
     "country" : req.body.country, 
@@ -65,22 +76,6 @@ router.post('/updateProfile', function(req, res, next){
       res.send(results).status(results.code);
     }
   });
-
-  // User.findOneAndUpdate(
-  //   { username: req.session.user  }, 
-  //   { $set: {
-  //     location : req.body.location, 
-  //     country : req.body.country, 
-  //     firstName : req.body.firstName, 
-  //     lastName : req.body.lastName, 
-  //     phone : req.body.phone
-  //     }
-  //   }, (err, doc) => {
-  //     if(err) {
-  //       res.status(400).send(err);
-  //     }
-  //     res.status(200).send(doc);
-  //   } )
 });
 
 
@@ -98,71 +93,139 @@ router.post('/upload', function(req, res, next){
 
 
 /* Post a new Project */
-router.post('/addProject', function(req, res, next){
-  var newProject = new Project({
-    name: req.body.name,
-    description: req.body.description,
-    skillsRequired: req.body.skills,
-    budget: req.body.budget
-  });
-  newProject.save().then((doc) => {
-    res.status(200).send(doc);
-  }, (e) => {
-    res.status(400).send(e);
+router.post('/postProject', function(req, res, next){
+  console.log('Post Project hit');
+  kafka.make_request('postProject',{
+      "user": req.session.user,
+      "name": req.body.title,
+      "description": req.body.description,
+      "skills": req.body.skills,
+      "budget": req.body.budget,
+      "owner": req.body.owner
+  }, function(err,results){
+    console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
   });
 });
 
 /* Post a new Bid */
-router.post('/addBid', function(req, res, next){
-  var newBid = new Bid({
-    bidder: req.body.bidder,
+router.post('/postBid', function(req, res, next){
+  console.log('Post Bid hit');
+  kafka.make_request('postBid',{
+    bidder: req.body.freelancer,
     bidAmount: req.body.bidAmount,
-    biddingProjectName: req.body.biddingProjectName
-  });
-  newBid.save().then((doc) => {
-    res.status(200).send(doc);
-  }, (e) => {
-    res.status(400).send(e);
+    projectName: req.body.project,
+    employer: req.body.employer
+}, function(err,results){
+  console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
   });
 });
 
 /* List all Projects */
-router.get('/allProjects', function(req, res, next){
-  Project.find().then((docs) => {
-    console.log(docs);
-    res.status(200).send(docs);
-  })
+router.get('/showProjects', function(req, res, next){
+  console.log('Show Projects API hit');
+  if (req.session && req.session.user) {
+    kafka.make_request('showProjects',{}, function(err,results){
+    console.log('In Kafka: %o', results);
+      if(err){
+        res.send(err).status(results.code);
+      }
+      else
+      {
+        res.send(results.value).status(results.code);
+      }
+    });
+  } else {
+    console.log('else blcok')
+    res.redirect('/login');
+  }
 });
 
 /* List all Bids for a particular project */
-router.get('/allBids', function(req, res, next){
-  Bid.findOne({ biddingProjectName: req.body.projectName }, (err, docs) => {
-    if(err) {
-      return res.send(err);
-    }
-    res.status(200).send(docs);
-  })
+router.get('/showBids', function(req, res, next){
+  kafka.make_request('showBids',{
+    projectName : req.body.projectName
+  }, function(err,results){
+    console.log('In Kafka: %o', results);
+      if(err){
+        res.send(err).status(results.code);
+      }
+      else
+      {
+        res.send(results).status(results.code);
+      }
+    });
 });
 
 /* Retrieve a profile */
-router.get('/profile', function(req, res, next){
-  User.findOne({ username: req.session.user }, (err, doc) => {
-    if(err) {
-      return res.send(err);
-    }
-    res.contentType(doc.img.contentType);
-    res.status(200).send(doc.img.data);
-  })
+router.get('/profile', checkAuth(), function(req, res, next){
+  // kafka.make_request('profile',{
+  //   username: req.session.user
+  // }, function(err,results){
+  //   console.log('In Kafka: %o', results);
+  //     if(err){
+  //       res.send(err).status(results.code);
+  //     }
+  //     else
+  //     {
+  //       res.send(results).status(results.code);
+  //     }
+  //   });
+    console.log('PROFILE API HIT');
+    console.log(req.session.passport.user);
+    res.json({user : req.session.passport.user}).status(200);
 });
+
+/* Show Project Details */
+
+router.post('/showProjectDetails', function(req, res, next) {
+  console.log('Show Project Details API hit.');
+  console.log(req.session);
+  console.log(req.body.project);
+  if (req.session && req.session.user) {
+    kafka.make_request('anyRequest',{
+      username: req.session.user
+    }, function(err,results){
+      console.log('In Kafka: %o', results.value);
+        if(err){
+          res.send(err).status(results.code);
+        }
+        else
+        {
+        /* Convert RowDataPacket into JSON object*/
+        var string=JSON.stringify(results.value);
+        var json =  JSON.parse(string);
+        console.log(JSON.stringify(json));
+          res.json({
+            list: JSON.stringify(json)
+          });
+        }
+      });
+  }
+}
+);
 
 /* Check Session API */
 
 router.get('/checkSession', function(req, res, next){
-  console.log('Session API hit.')
+  console.log('Check Session API hit.')
   console.log(req.session);
-  if(req.session && req.session.user) {
+  if(req.isAuthenticated()) {
     console.log('Session existing')
-    res.status(200).json({user: req.session.user});
+    res.status(200).json({user: req.session.passport.user});
   }
   else {
     console.log('Error: Session ended')
@@ -174,9 +237,8 @@ router.get('/checkSession', function(req, res, next){
 /* Logout */
 router.get('/logout', function(req, res, next) {
   console.log('Logout API hit.');
-  console.log(req.session);
-  if (req.session && req.session.user) {
-    req.session.destroy();
+  if (req.isAuthenticated()) {
+    req.logOut();
     console.log(req.session);
     res.status(200).send('Logout success');
   } else {
@@ -184,6 +246,25 @@ router.get('/logout', function(req, res, next) {
   }
  
 });
+
+function checkAuth() {
+    return(req, res, next) => {
+      if(req.isAuthenticated()) {
+        return next();
+      }
+      throw ('Session doesn\'t exist.')
+    }
+}
+
+// function authPreCheck() {
+//   return(req, res, next) => {
+//     if(!req.isAuthenticated()) {
+//       return next();
+//     } else {
+//       res.json({user: req.session.passport.user})
+//     }
+//   }
+// }
 
 module.exports = router;
 

@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var http = require('http');
 var passport = require('passport');
@@ -9,11 +9,9 @@ var index = require('./routes/index');
 var session = require("express-session");
 var mongoSessionURL = "mongodb://localhost:27017/sessions";
 var mongoStore = require("connect-mongo")(session);
-// var multer = require("multer");
 var fs = require('fs');
 
 const cors = require('cors');
-
 
 var fileUpload = require('express-fileupload')
 
@@ -25,7 +23,7 @@ app.set('port', process.env.PORT || 3001);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 
 app.use(session({
   secret: "CMPE273_passport",
@@ -45,8 +43,7 @@ app.use(passport.session());
 
 //Cross-Origin connection
 app.use(function(req, res, next) {
-  // res.header("Access-Control-Allow-Origin", '*');
-  res.header("Access-Control-Allow-Origin", 'http://localhost:8080');
+  res.header("Access-Control-Allow-Origin", '*');
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
