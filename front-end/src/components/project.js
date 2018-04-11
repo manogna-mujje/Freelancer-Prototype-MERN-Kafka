@@ -33,7 +33,7 @@ class Project extends Component {
         if(event.target.id === 'bids-button') {
             console.log('Bids Details:')
             console.log(this.props.bids);
-            this.props.bidsTabClick(this.props.match.params.name);
+            console.log(this.props.bidsTabClick(this.props.match.params.name));
             setTimeout(()=>{
                 document.getElementById('Bids').style.display = "block";
                 document.getElementById('Project-Details').style.display = "none";
