@@ -10,7 +10,7 @@ var profileUpdate = require('./services/update-profile');
 var postProject = require('./services/post-project');
 var postBid = require('./services/post-bid');
 var showProjects = require('./services/projects');
-var showBids = require('./services/bids');
+var bids = require('./services/bids');
 var projectDetails = require('./services/projectDetails');
 var postBid = require('./services/post-bid');
 var persistedLogin = require('./services/persisted-login.js');
@@ -97,12 +97,14 @@ consumer.on('message',  (message) => {
             handler = showProjects;
             break;
         case  'showBids':
-            handler = showBids;
+            handler = bids;
             break;
         case 'anyRequest':
-            // if(data.data.action === 'show-project-details'){
+            if(data.data.action === 'show-project-details'){
                 handler = projectDetails;
-            // } 
+            } else {
+                handler = bids;
+            }
             break;
         case 'postBid':
             handler = postBid;

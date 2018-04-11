@@ -12,10 +12,10 @@ class Project extends Component {
     constructor(props){
         super(props);
         this.state = {
-            projectID : "",
             description: "",
             budget: "",
             skills: "",
+            employer: "",
             status: "open"
         }
         this.handleClick = this.handleClick.bind(this);
@@ -40,21 +40,20 @@ class Project extends Component {
                 console.log(JSON.parse(this.props.bids.list)[0]);
             }, 1000);
         } else {
-            this.props.detailsTabClick(this.props.match.params.name);
-            console.log('Props Details:')
-            console.log(this.props.details);
-            setTimeout(()=>{
+            this.props.detailsTabClick(this.props.match.params.name).then((data)=>{
+                console.log(JSON.parse(this.props.details.list));
+                console.log(JSON.parse(this.props.details.list).postedProjects[0].budget);
+                // console.log(JSON.parse(this.props.details.list.postedProjects)[0].budget);
                 this.setState({
-                    description: JSON.parse(this.props.details.list)[0].description,
-                    budget: JSON.parse(this.props.details.list)[0].budget,
-                    skills: JSON.parse(this.props.details.list)[0].skills
+                    description: JSON.parse(this.props.details.list).postedProjects[0].description,
+                    budget: JSON.parse(this.props.details.list).postedProjects[0].budget,
+                    skills: JSON.parse(this.props.details.list).postedProjects[0].skills,
+                    employer: JSON.parse(this.props.details.list).postedProjects[0].owner
                     // status: JSON.parse(this.props.details.list)[0].status
-                })
-            }, 1000);
-            setTimeout(()=>{
+                });
                 document.getElementById('Project-Details').style.display = "block";
                 document.getElementById('Bids').style.display = "none";
-            }, 2000);
+            });
         }   
     }
 

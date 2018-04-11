@@ -1,8 +1,7 @@
 export default function (state = {}, action) {
     switch (action.type) {
       case 'BIDS_CLICK_FULFILLED':
-      console.log('switch');
-      console.log('BIDS_CLICK_FULFILLED');
+        console.log('BIDS_CLICK_FULFILLED');
         if(action.payload.length !== 0){
           return {
             list: action.payload.list

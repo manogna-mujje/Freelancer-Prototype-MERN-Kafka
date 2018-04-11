@@ -134,7 +134,7 @@ router.post('/postBid', function(req, res, next){
 router.get('/showProjects', function(req, res, next){
   console.log('Show Projects API hit');
   if (req.isAuthenticated()) {
-    kafka.make_request('showProjects',{}, function(err,results){
+    kafka.make_request('anyRequest',{}, function(err,results){
     console.log('In Kafka: %o', results);
       if(err){
         res.send(err).status(results.code);
@@ -149,8 +149,10 @@ router.get('/showProjects', function(req, res, next){
 
 /* List all Bids for a particular project */
 router.post('/showBids', function(req, res, next){
-  kafka.make_request('showBids',{
-    projectName : req.body.projectName
+  console.log('Show Bids API hit');
+  kafka.make_request('anyRequest',{
+    action: 'show-bid-details',
+    project : req.body.project
   }, function(err,results){
     console.log('In Kafka: %o', results);
       if(err){
@@ -178,6 +180,7 @@ router.post('/showProjectDetails', function(req, res, next) {
   console.log(req.body.project);
   if (req.isAuthenticated()) {
     kafka.make_request('anyRequest',{
+      action: 'show-project-details',
       username: req.session.passport.user,
       project : req.body.project
     }, function(err,results){
@@ -220,6 +223,7 @@ router.get('/logout', function(req, res, next) {
   console.log('Logout API hit.');
   if (req.isAuthenticated()) {
     req.logOut();
+    req.session.destroy();
     res.status(200).send('Logout success');
   } else {
     res.status(400).send('Already logged out.');
