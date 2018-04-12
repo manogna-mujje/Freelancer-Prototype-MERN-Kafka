@@ -14,6 +14,7 @@ class Project extends Component {
         super(props);
         this.state = {
             bids: [],
+            isAsc: false,
             description: "",
             budget: "",
             skills: "",
@@ -21,6 +22,7 @@ class Project extends Component {
             status: "open"
         }
         this.handleClick = this.handleClick.bind(this);
+        this.sort = this.sort.bind(this);
     }
 
     componentDidMount(){
@@ -32,6 +34,12 @@ class Project extends Component {
             });
             document.getElementById('Bids').style.display = "block";
             document.getElementById('Project-Details').style.display = "none";
+        })
+    }
+
+    sort(){
+        this.setState({
+            isAsc: !this.state.isAsc
         })
     }
 
@@ -65,24 +73,27 @@ class Project extends Component {
     render(){
         let bidItems, bidsLength, bidAvg, num = 1;
         console.log(this.state.bids);
-
+        
         if(this.state.bids !== [] && typeof(this.state.bids) !== 'undefined'){
-            console.log(true);
+        // Sorting Bid Items
+        let bidArray = this.state.bids;
+        if(!this.state.isAsc){
+            bidArray.sort(function(a,b){
+                return parseInt(b.bidAmount) - parseInt(a.bidAmount);
+            })
+        } else {
+            bidArray.sort(function(a,b){
+                return parseInt(a.bidAmount) - parseInt(b.bidAmount);
+            })
+        }
             bidsLength = this.state.bids.length;
             let totalBidAmount = 0;
-            // projectItems = currentItems.map((project, index) => {
-            //     return (
-            //         <ProjectItem key={index} project={project} user={this.props.user}/>
-            //     );
-            // });
             console.log(typeof(this.state.bids));
-            bidItems = this.state.bids.map((bid, index) => {
-                console.log(`Bid Items section ${num}`);
-                num++;
+            bidItems = bidArray.map((bid, index) => {
                 console.log(bid);
                 totalBidAmount = totalBidAmount + parseInt(bid.bidAmount);
                 bidAvg = totalBidAmount/bidsLength;
-                return ( <li> <BidItem key ={index} project={this.props.match.params.name} bid={bid}/> </li>);
+                return (<li> <BidItem key ={index} project={this.props.match.params.name} bid={bid}/> </li>);
             });
         } else {
             bidsLength = 0;
@@ -112,6 +123,10 @@ class Project extends Component {
                     <div className="tab">
                         <button className="tablinks"  id="bids-button" onClick={this.handleClick}>Bids</button>
                         <button className="tablinks" id="project-details-button" onClick={this.handleClick}>Project Details</button>
+                        <div className="sort-buttons"> 
+                            <button><div className="triangle-up" onClick = {this.sort}></div></button>
+                            <button><div className="triangle-down" onClick = {this.sort} ></div></button>
+                        </div>
                     </div>
                     <div id="Bids" className="tabcontent">
                         <ul> {bidItems} </ul>

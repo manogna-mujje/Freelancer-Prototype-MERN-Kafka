@@ -387,3 +387,23 @@ div#hire-button {
   position: relative;
   width: 150px;
 }
+
+.sort-buttons{
+  float: right;
+}
+
+.triangle-up {
+	width: 0;
+	height: 0;
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	border-bottom: 30px solid #555;
+}
+
+.triangle-down {
+	width: 0;
+	height: 0;
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	border-top: 30px solid #555;
+}
