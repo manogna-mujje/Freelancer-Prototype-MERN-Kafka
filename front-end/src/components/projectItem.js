@@ -18,6 +18,7 @@ class ProjectItem extends Component {
   }
 
   render() {
+    console.log(this.props.project);
       let projectName = this.props.project.name;
       let linkToProject = '/projects/'+ projectName;
       let projectOwner = this.props.project.owner;
@@ -42,6 +43,7 @@ class ProjectItem extends Component {
                     owner = {this.props.project.owner}
                     closePopup={this.togglePopup.bind(this)}
                     user={this.props.user}
+                    currentUser = {this.props.currentUser}
                   />
                   : null
                 }

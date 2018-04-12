@@ -3,7 +3,7 @@ function handle_request(msg, collection, callback){
     var res = {};
     console.log("In handle request:"+ JSON.stringify(msg));
     collection.findOneAndUpdate(
-    { username: msg.user }, 
+    { username: msg.user}, 
     { $set: {
       location : msg.location, 
       country : msg.country, 
@@ -11,13 +11,12 @@ function handle_request(msg, collection, callback){
       lastName : msg.lastName, 
       phone : msg.phone
       }
-    }, {
-      upsert: false
     }, (err, doc) => {
       if(err) {
         res.code = 400;
         res.value = err;
       }
+      console.log(doc);
       res.code = 200;
       res.value = 'Profile updated';
     });

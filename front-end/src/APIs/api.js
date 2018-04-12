@@ -116,8 +116,8 @@ export const checkSession = function (){
             })
 };
 
-export const postProject = function (title, description, skills, owner, budget){
-    console.log('API name: ' + name);
+export const postProject = function (title, description, skills, budget){
+    console.log('Project owner: ' + owner);
     url = `${api}/postProject`;
     return fetch(url, {
               method: 'POST',
@@ -137,7 +137,8 @@ export const postProject = function (title, description, skills, owner, budget){
   };
 
 
-  export const postBid = function (project, freelancer, bidAmount, employer){
+  export const postBid = function (project, bidAmount, employer, freelancerEmail){
+    console.log(employer);
     url = `${api}/postBid`;
     return fetch(url, {
               method: 'POST',
@@ -148,9 +149,9 @@ export const postProject = function (title, description, skills, owner, budget){
               credentials: 'include',
               body: JSON.stringify({
                 project,
-                freelancer, 
                 bidAmount, 
-                employer
+                employer,
+                freelancerEmail
               })
             }) 
   };
@@ -228,4 +229,20 @@ export const upload = function (data){
             body: data,
             credentials: 'include'
           }) 
+};
+
+/* Hire a freelancer */
+export const hireFreelancer = function (project, freelancer, bidAmount, bidderEmail){
+  url = `${api}/hireFreelancer`;
+  return fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              project, freelancer, bidAmount, bidderEmail
+            })
+          })
 };

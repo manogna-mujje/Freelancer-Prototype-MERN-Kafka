@@ -2,13 +2,14 @@
 function handle_request(msg, collection, callback){
     var res = {};
     console.log("In handle request:"+ JSON.stringify(msg));
-    collection.find({postedProjects:{$exists: true}}, {postedProjects : 1}).toArray((err, docs) => {
+    collection.find({postedProjects: {$exists: true}}, {postedProjects: 1}).toArray((err, docs) => {
         if(err) {
+            console.log('Unable to fetch Projects');
             res.code = 400;
             res.value = 'Unable to fetch Projects';
             return;
         }
-        console.log(docs);
+        console.log(docs.length);
         var projects = [];
         docs.forEach(function(element) {
             console.log(element.postedProjects);

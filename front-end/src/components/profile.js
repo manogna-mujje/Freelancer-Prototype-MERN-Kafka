@@ -95,6 +95,7 @@ class Profile extends Component {
                             <p> Last Name: {this.state.user.lastName}</p><br/>
                             <p> Location: {this.state.user.location}</p><br/>
                             <p> Country: {this.state.user.country}</p><br/>
+                            <p> Email: {this.state.user.email}</p><br/>
                             <p> Phone: {this.state.user.phone}</p><br/>
                         </div> :
                         <div id = "editable-profile">  

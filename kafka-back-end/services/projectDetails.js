@@ -1,7 +1,7 @@
 function handle_request(msg, collection, callback){
     var res = {};
-    console.log("In handle request:"+ JSON.stringify(msg.project));
-    collection.find({'postedProjects.name': msg.project}, {'postedProjects' : 1}).toArray((err, docs) => {
+    console.log("In handle request:"+ JSON.stringify(msg));
+    collection.find({'postedProjects.name': msg.project}, {'postedProjects.$.name' : 1}).toArray((err, docs) => {
         if(err) {
             res.code = 400;
             res.value = 'Unable to fetch Projects';

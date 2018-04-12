@@ -3,15 +3,17 @@ import * as API from '../APIs/api';
 import Menu from './menu' 
 import {checkSession} from '../actions/index';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { bindActionCreators, compose } from 'redux';
 import { bidsTabClick } from '../actions';
 import { detailsTabClick } from '../actions';
 import ProjectItem from './projectItem';
+import BidItem from './bidItem';
 
 class Project extends Component {
     constructor(props){
         super(props);
         this.state = {
+            bids: [],
             description: "",
             budget: "",
             skills: "",
@@ -22,29 +24,31 @@ class Project extends Component {
     }
 
     componentDidMount(){
-        this.props.bidsTabClick(this.props.match.params.name);
-            setTimeout(()=>{
-                document.getElementById('Bids').style.display = "block";
-            }, 1000);
+        this.props.bidsTabClick(this.props.match.params.name).then((data)=> {
+            let bidArray = JSON.stringify(data);
+            let bidObj = JSON.parse(bidArray);
+            this.setState({
+                bids: bidObj.value.value
+            });
+            document.getElementById('Bids').style.display = "block";
+            document.getElementById('Project-Details').style.display = "none";
+        })
     }
 
     handleClick(event){
         console.log(event);
         if(event.target.id === 'bids-button') {
-            console.log('Bids Details:')
-            console.log(this.props.bids);
-            this.props.bidsTabClick(this.props.match.params.name
-            console.log(this.props.bidsTabClick(this.props.match.params.name));
-            setTimeout(()=>{
+            this.props.bidsTabClick(this.props.match.params.name).then((data)=> {
+                let bidArray = JSON.stringify(data);
+                let bidObj = JSON.parse(bidArray);
+                this.setState({
+                    bids: bidObj.value.value
+                });
                 document.getElementById('Bids').style.display = "block";
                 document.getElementById('Project-Details').style.display = "none";
-                console.log(JSON.parse(this.props.bids.list)[0]);
-            }, 1000);
+            })
         } else {
             this.props.detailsTabClick(this.props.match.params.name).then((data)=>{
-                console.log(JSON.parse(this.props.details.list));
-                console.log(JSON.parse(this.props.details.list).postedProjects[0].budget);
-                // console.log(JSON.parse(this.props.details.list.postedProjects)[0].budget);
                 this.setState({
                     description: JSON.parse(this.props.details.list).postedProjects[0].description,
                     budget: JSON.parse(this.props.details.list).postedProjects[0].budget,
@@ -59,22 +63,61 @@ class Project extends Component {
     }
 
     render(){
+        let bidItems, bidsLength, bidAvg, num = 1;
+        console.log(this.state.bids);
+
+        if(this.state.bids !== [] && typeof(this.state.bids) !== 'undefined'){
+            console.log(true);
+            bidsLength = this.state.bids.length;
+            let totalBidAmount = 0;
+            // projectItems = currentItems.map((project, index) => {
+            //     return (
+            //         <ProjectItem key={index} project={project} user={this.props.user}/>
+            //     );
+            // });
+            console.log(typeof(this.state.bids));
+            bidItems = this.state.bids.map((bid, index) => {
+                console.log(`Bid Items section ${num}`);
+                num++;
+                console.log(bid);
+                totalBidAmount = totalBidAmount + parseInt(bid.bidAmount);
+                bidAvg = totalBidAmount/bidsLength;
+                return ( <li> <BidItem key ={index} project={this.props.match.params.name} bid={bid}/> </li>);
+            });
+        } else {
+            bidsLength = 0;
+            bidItems = 'No bids yet!';
+        }
         return (
             <div className="project-details">
                 <Menu />
                 <div id = "project-title"> 
                     {this.props.match.params.name}
                 </div>
+                <div id= "bid-summary"> 
+                <ul>
+                    <li> 
+                       <span> Bids </span> <br/> {bidsLength}
+                    </li>
+                    <li> 
+                    <span>  Avg Bid (USD) </span><br/> ${Math.ceil(bidAvg)}
+                    </li>
+                    <br />
+                    <br />
+                </ul>
+                </div>
+          
+                <br />
                 <div id="project-buttons"> 
                     <div className="tab">
                         <button className="tablinks"  id="bids-button" onClick={this.handleClick}>Bids</button>
                         <button className="tablinks" id="project-details-button" onClick={this.handleClick}>Project Details</button>
                     </div>
                     <div id="Bids" className="tabcontent">
-                    {this.props.bids.list}
+                        <ul> {bidItems} </ul>
                     </div>
                     <div id="Project-Details" className="tabcontent">
-                    <br/>
+                        <br/>
                        <i> Project Description: </i>  <br/> {this.state.description} <br/> <br/>
                        <i> Estimated Budget: </i>  <br/> {this.state.budget} <br/> <br/>
                        <i> Skills: </i>  <br/> {this.state.skills} <br/> <br/>
@@ -102,5 +145,3 @@ function mapDispatchToProps(dispatch){
 
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project); 
-
-// export default Project;

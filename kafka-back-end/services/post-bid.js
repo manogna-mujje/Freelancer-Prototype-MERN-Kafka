@@ -2,7 +2,7 @@
 function handle_request(msg, collection, callback){
   var res = {};
   console.log("In handle request:"+ JSON.stringify(msg));
-  console.log(msg.employer);
+  console.log(msg);
   // collection.update({username: msg.employer, "postedProjects.name": "Build a large-scale Fandango Website"}, {$set : {"postedProjects.$.bids": {"bidder": "test", "bidAmount": 1000}}})
     collection.update(
       {username: msg.employer, "postedProjects.name": msg.projectName}, 
@@ -11,7 +11,8 @@ function handle_request(msg, collection, callback){
              "postedProjects.$.bids" : 
             { 
               "bidder": msg.bidder, 
-              "bidAmount": msg.bidAmount 
+              "bidAmount": msg.bidAmount,
+              "bidderEmail": msg.bidderEmail
             }
           }
       },

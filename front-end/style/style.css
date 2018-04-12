@@ -357,3 +357,33 @@ li {
   cursor: pointer;
 }
 
+#bid-summary {
+  padding-top: 5px;
+}
+
+#bid-summary li{
+  float: left;
+  border-right: 1px solid lightskyblue;
+  color: royalblue;
+  font-weight: bold;
+}
+
+img {
+  float: left;
+}
+
+#bid-item {
+  border-bottom: 1px solid lightblue;
+  height: 165px;
+}
+
+div #bidder-details {
+  padding-left: 150px;
+  padding-top: 20px;
+}
+
+div#hire-button {
+  float: right;
+  position: relative;
+  width: 150px;
+}

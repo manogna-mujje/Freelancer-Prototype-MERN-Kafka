@@ -3,6 +3,7 @@ function handle_request(msg, collection, callback){
     var res = {};
     console.log("In handle request:"+ JSON.stringify(msg));
     collection.insert({
+        email: msg.email,
         username: msg.username,
         password: msg.password
     }, function(err, doc){

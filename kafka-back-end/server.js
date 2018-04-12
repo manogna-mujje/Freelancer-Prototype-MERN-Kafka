@@ -14,6 +14,7 @@ var bids = require('./services/bids');
 var projectDetails = require('./services/projectDetails');
 var postBid = require('./services/post-bid');
 var persistedLogin = require('./services/persisted-login.js');
+var hire = require('./services/hire');
 
 
 // Add MongoDB connections
@@ -38,7 +39,7 @@ MongoClient.connect(mongoURL, function (err, db) {
 // });
 
 // Add additional topics
-consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'postBid', 'anyRequest'], function (err, added) {
+consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'hire','postBid', 'anyRequest'], function (err, added) {
     if(err) {
         console.log(`AddTopics Error: ${err}`);
     } else if(added){
@@ -96,8 +97,8 @@ consumer.on('message',  (message) => {
         case  'showProjects':
             handler = showProjects;
             break;
-        case  'showBids':
-            handler = bids;
+        case  'hire':
+            handler = hire;
             break;
         case 'anyRequest':
             if(data.data.action === 'show-project-details'){

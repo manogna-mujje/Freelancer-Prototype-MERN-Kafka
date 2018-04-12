@@ -31,7 +31,7 @@ class PostProject extends Component {
     }
 
     handleSubmit(event){
-        API.postProject(this.refs.title.value, this.refs.description.value, this.refs.skills.value, this.state.user, this.refs.range.value)
+        API.postProject(this.refs.title.value, this.refs.description.value, this.refs.skills.value, this.refs.range.value)
         .then((res) => {
             if(res.status === 200){
                 console.log('Push to different page');

@@ -5,9 +5,9 @@ var {Project} = require('./models/project');
 var {Bid} = require('./models/bid');
 var passport = require('passport');
 require('./passport-login')(passport);
-require('./passport-signup')(passport);
 var router = express.Router();
 var kafka = require('./kafka/client');
+var {sendEmail} = require('./email') ;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -16,17 +16,23 @@ router.get('/', function(req, res, next) {
 
 /* Sign up */
 router.post('/signup', function(req, res, next){
-  passport.authenticate('signup', function(err, user) {
-    console.log('Signup Response: %o', user);
-    if(err) {
+    kafka.make_request('Authentication', {
+    "action": 'signup', 
+    "email": req.body.email,
+    "username": req.body.username,
+    "password": req.body.password
+  }, function(err,results){
+    console.log('In Kafka: %o', results);
+    if(err){
         res.status(500).send();
-    }
-    if(!user) {
-        res.status(400).send('Signup failed');
     } else {
-      return res.status(200).send('Signup successful');
+      if(results.code == 200){
+        res.status(200).send('Signup successful');
+      } else {
+        res.status(400).send('Signup failed');
+      }
     }
-})(req, res);
+  });
 });
 
 /* Login Account */
@@ -56,7 +62,7 @@ router.post('/updateProfile', function(req, res, next){
     res.status(401).send('Login unauthorized');
   }
   kafka.make_request('profileUpdate',{
-    "user": req.session.passport.user,
+    "user": req.session.passport.user.username,
     "location" : req.body.location, 
     "country" : req.body.country, 
     "firstName" : req.body.firstName, 
@@ -92,12 +98,12 @@ router.post('/upload', function(req, res, next){
 router.post('/postProject', function(req, res, next){
   console.log('Post Project hit');
   kafka.make_request('postProject',{
-      "user": req.session.passport.user,
+      "user": req.session.passport.user.username,
       "name": req.body.title,
       "description": req.body.description,
       "skills": req.body.skills,
       "budget": req.body.budget,
-      "owner": req.body.owner
+      "owner": req.session.passport.user.username
   }, function(err,results){
     console.log('In Kafka: %o', results);
     if(err){
@@ -113,11 +119,13 @@ router.post('/postProject', function(req, res, next){
 /* Post a new Bid */
 router.post('/postBid', function(req, res, next){
   console.log('Post Bid hit');
+  console.log(`Checking Owner: ${req.body.employer}`);
   kafka.make_request('postBid',{
-    bidder: req.body.freelancer,
+    bidder: req.session.passport.user.username,
     bidAmount: req.body.bidAmount,
     projectName: req.body.project,
-    employer: req.body.employer
+    employer: req.body.employer,
+    bidderEmail: req.body.freelancerEmail
 }, function(err,results){
   console.log('In Kafka: %o', results);
     if(err){
@@ -134,7 +142,7 @@ router.post('/postBid', function(req, res, next){
 router.get('/showProjects', function(req, res, next){
   console.log('Show Projects API hit');
   if (req.isAuthenticated()) {
-    kafka.make_request('anyRequest',{}, function(err,results){
+    kafka.make_request('showProjects',{}, function(err,results){
     console.log('In Kafka: %o', results);
       if(err){
         res.send(err).status(results.code);
@@ -173,7 +181,6 @@ router.get('/profile', checkAuth(), function(req, res, next){
 });
 
 /* Show Project Details */
-
 router.post('/showProjectDetails', function(req, res, next) {
   console.log('Show Project Details API hit.');
   console.log(req.session);
@@ -181,7 +188,7 @@ router.post('/showProjectDetails', function(req, res, next) {
   if (req.isAuthenticated()) {
     kafka.make_request('anyRequest',{
       action: 'show-project-details',
-      username: req.session.passport.user,
+      username: req.session.passport.user.username,
       project : req.body.project
     }, function(err,results){
       console.log('In Kafka: %o', results.value);
@@ -190,7 +197,7 @@ router.post('/showProjectDetails', function(req, res, next) {
         }
         else
         {
-        /* Convert RowDataPacket into JSON object*/
+        /* Convert RowDataPacket into JSON object */
         var string=JSON.stringify(results.value);
         var json =  JSON.parse(string);
         console.log(JSON.stringify(json));
@@ -204,7 +211,6 @@ router.post('/showProjectDetails', function(req, res, next) {
 );
 
 /* Check Session API */
-
 router.get('/checkSession', function(req, res, next){
   console.log('Check Session API hit.')
   if(req.isAuthenticated()) {
@@ -228,7 +234,27 @@ router.get('/logout', function(req, res, next) {
   } else {
     res.status(400).send('Already logged out.');
   }
- 
+});
+
+/* Hire a freelancer */
+router.post('/hireFreelancer', function(req, res, next){
+  console.log('Hire freelancer API hit');
+  kafka.make_request('hire',{
+    freelancer: req.body.freelancer,
+    project: req.body.project,
+    bidAmount: req.body.bidAmount,
+    employer: req.session.passport.user.username
+}, function(err,results){
+  console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      sendEmail(req.body.bidderEmail, req.body.project, req.body.freelancer);
+      res.send(results).status(results.code);
+    }
+  });
 });
 
 function checkAuth() {

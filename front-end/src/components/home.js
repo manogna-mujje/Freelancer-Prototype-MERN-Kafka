@@ -18,15 +18,13 @@ class Home extends Component {
     }
 
     componentDidMount(){
-        console.log('Comp Did Mount')
         this.props.checkSession().then((res)=> {
             this.setState({
-                user: this.props.user.user.firstName
+                user: this.props.currentUser.user.firstName
             })
         })
         API.showProjects().then((res) => {
             res.json().then((data) => {
-                console.log(data);
                 this.setState({
                     projects: data,
                     arrived: true
@@ -42,11 +40,12 @@ class Home extends Component {
                 <h2> Freelance Jobs and Contests </h2>
                 <p> <Link className="menu-button" id="post-project" to="/post-project">  Post a Project  </Link> </p> <br/>
                 <div> 
-                { this.props.user && 
+                { this.props.currentUser && 
                     this.state.arrived && 
                     <Search 
                     projects = {this.state.projects}
-                    user = {this.props.user.user.username}
+                    currentUser = {this.props.currentUser}
+                    user = {this.props.currentUser.user.username}
                     />
                     }
                 </div>
@@ -58,7 +57,7 @@ class Home extends Component {
 function mapStateToProps(state) {
     return {  
         isLoggedin: state.session.isLoggedin,
-        user: state.session
+        currentUser: state.session
     };
 }
 

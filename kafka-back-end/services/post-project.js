@@ -6,7 +6,8 @@ function handle_request(msg, collection, callback){
         name: msg.name,
         description: msg.description,
         skills: msg.skills,
-        budget: msg.budget
+        budget: msg.budget,
+        owner: msg.owner
       };
       collection.update(
         { username: msg.user }, 
