@@ -117,7 +117,7 @@ export const checkSession = function (){
 };
 
 export const postProject = function (title, description, skills, budget){
-    console.log('Project owner: ' + owner);
+    // console.log('Project owner: ' + owner);
     url = `${api}/postProject`;
     return fetch(url, {
               method: 'POST',
@@ -130,7 +130,6 @@ export const postProject = function (title, description, skills, budget){
                 title, 
                 description, 
                 skills, 
-                owner,
                 budget
               })
             }) 

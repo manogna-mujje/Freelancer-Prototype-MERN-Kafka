@@ -3,8 +3,8 @@ function handle_request(msg, collection, callback){
     console.log("In handle request:"+ JSON.stringify(msg));
     collection.findOneAndUpdate(
     { username: msg.username}, 
-    { $set: {
-      amount: msg.amount
+    { $inc: {
+        amount: parseInt(msg.amount)
       }
     }, (err, doc) => {
       if(err) {

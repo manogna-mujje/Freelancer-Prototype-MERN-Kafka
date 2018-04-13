@@ -107,7 +107,7 @@ class Project extends Component {
                     isEmployer: true,
                     isUser: false
                 });
-            } else if(this.props.match.params.name in this.state.user.assignedProjects) {
+            } else if(this.state.user.assignedProjects && this.props.match.params.name in this.state.user.assignedProjects) {
                 this.setState({
                     isFreelancer: true,
                     isUser: false 

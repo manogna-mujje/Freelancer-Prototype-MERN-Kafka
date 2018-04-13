@@ -5,11 +5,14 @@ function handle_request(msg, collection, callback){
     console.log(msg.employer);    
       collection.update(
             { username: msg.employer, "postedProjects.name": msg.project}, 
-            { $set : 
-                {
-                   "postedProjects.$.paymentStatus": "done",
-                   "postedProjects.$.status": "closed"
-                }
+            {  $inc: {
+                    amount: parseInt(msg.amount)
+                },
+                $set : {   
+                "postedProjects.$.paymentStatus": "done",
+                "postedProjects.$.status": "closed"   
+            }
+                
             },
             (err, doc) => {
                 console.log(`Transaction Data - ${doc}`);
@@ -29,11 +32,15 @@ function handle_request(msg, collection, callback){
       console.log(projects);
       collection.update(
         { username: msg.freelancer }, 
-        { $set: 
+        {   $inc: 
+            {
+                amount: -parseInt(msg.amount)
+            }, 
+            $set: 
             {
                 [projects]: "done"
             }
-        }, 
+        },  
         (err, doc) => {
           if(err) {
             result.code = 400;
