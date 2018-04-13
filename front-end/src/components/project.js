@@ -8,24 +8,41 @@ import { bidsTabClick } from '../actions';
 import { detailsTabClick } from '../actions';
 import ProjectItem from './projectItem';
 import BidItem from './bidItem';
+import Payment from './payment';
+
 
 class Project extends Component {
     constructor(props){
         super(props);
         this.state = {
+            user: '',
             bids: [],
             isAsc: false,
             description: "",
             budget: "",
             skills: "",
             employer: "",
-            status: "open"
+            freelancer: "",
+            salary: "",
+            status: "",
+            isEmployer: false,
+            isFreelancer: false,
+            isUser: true,
+            fileURL: ''
         }
+        this.handleUpload = this.handleUpload.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.makePayment = this.makePayment.bind(this);
         this.sort = this.sort.bind(this);
     }
 
     componentDidMount(){
+        this.props.checkSession().then((res)=> {
+            this.setState({
+                user: this.props.currentUser
+            })
+        });
+
         this.props.bidsTabClick(this.props.match.params.name).then((data)=> {
             let bidArray = JSON.stringify(data);
             let bidObj = JSON.parse(bidArray);
@@ -43,27 +60,64 @@ class Project extends Component {
         })
     }
 
+    makePayment() {
+        API.makePayment(this.props.match.params.name, this.state.freelancer, this.state.salary).then ((res) => {
+            document.getElementById('payment-status').innerHTML = "Payment successfully made to Freelancer"
+        })
+    }
+
+    handleUpload(){
+        const data = new FormData();
+        data.append('file', this.uploadInput.files[0]);
+        data.append('filename', this.props.user);
+        API.upload(data).then((response) => {
+            response.json().then((body) => {
+              this.setState({ fileURL: `http://localhost:3001/${body.file}` });
+            });
+          });
+    }
+
     handleClick(event){
         console.log(event);
         if(event.target.id === 'bids-button') {
-            this.props.bidsTabClick(this.props.match.params.name).then((data)=> {
-                let bidArray = JSON.stringify(data);
-                let bidObj = JSON.parse(bidArray);
-                this.setState({
-                    bids: bidObj.value.value
-                });
                 document.getElementById('Bids').style.display = "block";
                 document.getElementById('Project-Details').style.display = "none";
-            })
         } else {
             this.props.detailsTabClick(this.props.match.params.name).then((data)=>{
+                console.log(`This PROJECT: ${JSON.stringify(JSON.parse(this.props.details.list).postedProjects[0])}`);
+    
                 this.setState({
+                    status: JSON.parse(this.props.details.list).postedProjects[0].status,
                     description: JSON.parse(this.props.details.list).postedProjects[0].description,
                     budget: JSON.parse(this.props.details.list).postedProjects[0].budget,
                     skills: JSON.parse(this.props.details.list).postedProjects[0].skills,
                     employer: JSON.parse(this.props.details.list).postedProjects[0].owner
-                    // status: JSON.parse(this.props.details.list)[0].status
                 });
+                if(JSON.parse(this.props.details.list).postedProjects[0].hired){
+                    this.setState({
+                        freelancer: JSON.parse(this.props.details.list).postedProjects[0].hired[0].freelancer,
+                        salary: JSON.parse(this.props.details.list).postedProjects[0].hired[0].bidAmount
+                    })
+                }
+           
+            //Verify if project name exists in the object of assigned projects of the user
+
+            if(this.state.user.username === this.state.employer) {
+                this.setState({
+                    isEmployer: true,
+                    isUser: false
+                });
+            } else if(this.props.match.params.name in this.state.user.assignedProjects) {
+                this.setState({
+                    isFreelancer: true,
+                    isUser: false 
+                });
+            }
+                console.log(this.state.isEmployer);
+                console.log(this.state.isFreelancer);
+                console.log(this.state.isUser);
+
+               
                 document.getElementById('Project-Details').style.display = "block";
                 document.getElementById('Bids').style.display = "none";
             });
@@ -72,20 +126,25 @@ class Project extends Component {
 
     render(){
         let bidItems, bidsLength, bidAvg, num = 1;
+        console.log(`CURRENT USER: ${this.state.user}`);
         console.log(this.state.bids);
+        console.log(this.state.freelancer);
+        console.log(this.state.salary);
+
         
         if(this.state.bids !== [] && typeof(this.state.bids) !== 'undefined'){
-        // Sorting Bid Items
-        let bidArray = this.state.bids;
-        if(!this.state.isAsc){
-            bidArray.sort(function(a,b){
-                return parseInt(b.bidAmount) - parseInt(a.bidAmount);
-            })
-        } else {
-            bidArray.sort(function(a,b){
-                return parseInt(a.bidAmount) - parseInt(b.bidAmount);
-            })
-        }
+
+            // Sorting Bid Items
+            let bidArray = this.state.bids;
+            if(!this.state.isAsc){
+                bidArray.sort(function(a,b){
+                    return parseInt(b.bidAmount) - parseInt(a.bidAmount);
+                })
+            } else {
+                bidArray.sort(function(a,b){
+                    return parseInt(a.bidAmount) - parseInt(b.bidAmount);
+                })
+            }
             bidsLength = this.state.bids.length;
             let totalBidAmount = 0;
             console.log(typeof(this.state.bids));
@@ -133,10 +192,37 @@ class Project extends Component {
                     </div>
                     <div id="Project-Details" className="tabcontent">
                         <br/>
-                       <i> Project Description: </i>  <br/> {this.state.description} <br/> <br/>
-                       <i> Estimated Budget: </i>  <br/> {this.state.budget} <br/> <br/>
-                       <i> Skills: </i>  <br/> {this.state.skills} <br/> <br/>
-                       <i> Status: </i> <br/> {this.state.status} <br/>
+                        <i> Project Description: </i>  <br/> {this.state.description} <br/> <br/>
+                        <i> Estimated Budget: </i>  <br/> {this.state.budget} <br/> <br/>
+                        <i> Skills: </i>  <br/> {this.state.skills} <br/> <br/>
+                        <i> Status: </i> <br/> {this.state.status} <br/>
+                        { this.state.isFreelancer &&
+                            <div id="freelancer-view">
+                            <br/>
+                                <div id="file-upload"> 
+                                <i> Submit Files: </i>  <br/>
+                                    <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
+                                    <a id="file" href={this.state.fileURL} />
+                                </div>
+                                <div id="comments-section">
+                                <br /> 
+                                <i> Comments: </i> <br />
+                                    <input type="text" id = "text-box" name="text" /><br />
+                                </div>
+                                <button id="file-upload-button" onClick={this.handleUpload}> 
+                                    Submit
+                                </button>
+                            </div>
+                        }
+                        { this.state.isEmployer &&
+                            <div id="employer-view">
+                                <br/>
+                                <button id="file-upload-button" onClick = { this.makePayment } >
+                                    Make Payment
+                                </button>
+                                <p id="payment-status"> </p>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -147,14 +233,16 @@ class Project extends Component {
 function mapStateToProps(state){
     return({
         bids: state.bids,
-        details: state.details
+        details: state.details,
+        currentUser: state.session.user
     });
 }
 
 function mapDispatchToProps(dispatch){
     return bindActionCreators({ 
         bidsTabClick: bidsTabClick,
-        detailsTabClick : detailsTabClick
+        detailsTabClick : detailsTabClick,
+        checkSession: checkSession
     }, dispatch);
 }
 

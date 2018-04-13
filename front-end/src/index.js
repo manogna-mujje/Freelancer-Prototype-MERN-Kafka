@@ -24,12 +24,6 @@ const createStoreWithMiddleware = applyMiddleware(
 
 export const store=createStoreWithMiddleware(reducers);
 
-// store.subscribe(()=> {
-//   saveState({
-//     session : store.getState().session
-//   });
-// });
-
 ReactDOM.render(
   <Provider store={createStoreWithMiddleware(reducers)}>
     <BrowserRouter> 

@@ -15,6 +15,8 @@ var projectDetails = require('./services/projectDetails');
 var postBid = require('./services/post-bid');
 var persistedLogin = require('./services/persisted-login.js');
 var hire = require('./services/hire');
+var payment = require('./services/payment');
+var payTransfer = require('./services/pay-transfer')
 
 
 // Add MongoDB connections
@@ -32,14 +34,8 @@ MongoClient.connect(mongoURL, function (err, db) {
     }
 });
 
-// consumer.commit(function(err, data) {
-//     if(err)
-//         console.log(err);
-//     console.log(data);
-// });
-
 // Add additional topics
-consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'hire','postBid', 'anyRequest'], function (err, added) {
+consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'hire','postBid', 'payment', 'payTransfer','anyRequest'], function (err, added) {
     if(err) {
         console.log(`AddTopics Error: ${err}`);
     } else if(added){
@@ -109,6 +105,12 @@ consumer.on('message',  (message) => {
             break;
         case 'postBid':
             handler = postBid;
+            break;
+        case 'payment':
+            handler = payment;
+            break;
+        case 'payTransfer':
+            handler = payTransfer;
             break;
         case 'Logs':
             //

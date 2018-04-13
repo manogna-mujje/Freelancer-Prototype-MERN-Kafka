@@ -19,10 +19,10 @@ class ProjectItem extends Component {
 
   render() {
     console.log(this.props.project);
-      let projectName = this.props.project.name;
-      let linkToProject = '/projects/'+ projectName;
-      let projectOwner = this.props.project.owner;
-      let linkToOwner = '/profile/' + projectOwner;
+    let projectName = this.props.project.name;
+    let linkToProject = '/projects/'+ projectName;
+    let projectOwner = this.props.project.owner;
+    let linkToOwner = '/profile/' + projectOwner;
     return (
       <div className="ProjectItem">
         <ul> 

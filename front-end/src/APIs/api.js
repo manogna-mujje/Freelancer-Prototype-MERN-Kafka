@@ -246,3 +246,35 @@ export const hireFreelancer = function (project, freelancer, bidAmount, bidderEm
             })
           })
 };
+
+/* Credit Account */
+export const creditAccount = function (amount){
+  url = `${api}/creditAccount`;
+  return fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+               amount
+            })
+          })
+};
+
+/* Make Payment */
+export const makePayment = function (project, freelancer, amount){
+  url = `${api}/makePayment`;
+  return fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              project, freelancer, amount
+            })
+          })
+};

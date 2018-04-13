@@ -3,6 +3,7 @@ import * as API from '../APIs/api';
 import { checkSession } from '../actions/index';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import CreditAmount from './credit';
 
 class Profile extends Component {
     constructor(props){
@@ -122,6 +123,7 @@ class Profile extends Component {
                                 <input type="submit" />
                             </form>
                             <p id="update-response"> {this.state.message} </p>
+                            <CreditAmount />
                         </div> 
                     }
                 </div>

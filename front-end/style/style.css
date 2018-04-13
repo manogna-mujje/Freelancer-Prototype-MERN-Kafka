@@ -232,8 +232,8 @@
 }
 
 div#project-buttons{
-  padding: 10px;
-  padding-top: 0;
+  padding: 30px;
+ 
 }
 
 #project-title {
@@ -244,11 +244,11 @@ div#project-buttons{
   padding: 60px;
   font-size: 220%;
   flex: 1;
-  
 }
 
 .project-details {
   width: 1440px;
+  margin-bottom: 50px;
 }
 
 div.container {
@@ -390,6 +390,7 @@ div#hire-button {
 
 .sort-buttons{
   float: right;
+  /* display: none; */
 }
 
 .triangle-up {
@@ -397,7 +398,7 @@ div#hire-button {
 	height: 0;
 	border-left: 15px solid transparent;
 	border-right: 15px solid transparent;
-	border-bottom: 30px solid #555;
+	border-bottom: 25px solid #555;
 }
 
 .triangle-down {
@@ -405,5 +406,45 @@ div#hire-button {
 	height: 0;
 	border-left: 15px solid transparent;
 	border-right: 15px solid transparent;
-	border-top: 30px solid #555;
+	border-top: 25px solid #555;
+}
+
+#file-upload-button {
+  margin-top: 10px;
+}
+
+#text-box {
+	height: 150px;
+	width: 300px;
+}
+
+#card-payment{
+  padding: 15px;
+}
+.Payment-Fields input{
+  width: 98%;
+  height: 50px;
+  border: 1px solid;
+  border-radius: 4px;
+  color: grey;
+}
+
+.private-info input {
+  float: left;
+  width: 48.2%;
+  padding: 10px;
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid;
+  color: grey;
+  margin-right: 10px;
+}
+
+#payment-buttons{
+  margin: 5px;
+}
+
+#private-info input{
+  float: left;
+  padding-right: 10px;
 }

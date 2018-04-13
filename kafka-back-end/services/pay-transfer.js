@@ -5,58 +5,48 @@ function handle_request(msg, collection, callback){
     console.log(msg.employer);    
       collection.update(
             { username: msg.employer, "postedProjects.name": msg.project}, 
-            { $push : 
+            { $set : 
                 {
-                   "postedProjects.$.hired": 
-                  { 
-                    "freelancer": msg.freelancer, 
-                    "bidAmount": msg.bidAmount
-                  }
-                },
-                $set : 
-                {
-                    "postedProjects.$.status" : "In progress"
+                   "postedProjects.$.paymentStatus": "done",
+                   "postedProjects.$.status": "closed"
                 }
             },
             (err, doc) => {
-                console.log(`Employer project status Data - ${doc}`);
+                console.log(`Transaction Data - ${doc}`);
                 if(err) {
                     res.code = 400;
                     res.value = err;
-                    result;
+                    return;
                 }
                 res.code = 200;
-                res.value = 'Freelancer hired successfully';
-                console.log('Employer hired freelancer successfully');
+                res.value = 'Payment done successfully';
+                console.log('Payment done successfully');
                 }
-                
         );
-
+        
+    let projects = 'assignedProjects.'+msg.project+'.paymentStatus';
     var result = {};
-      let projects = 'assignedProjects.'+msg.project;
+      console.log(projects);
       collection.update(
         { username: msg.freelancer }, 
-        { $set: {
-          [projects] : {
-              project: msg.project,
-              employer: msg.employer,
-              bidAmount: msg.bidAmount
+        { $set: 
+            {
+                [projects]: "done"
             }
-          }
-        }, (err, doc) => {
-          console.log(`Freelancer project status Data - ${doc}`);
+        }, 
+        (err, doc) => {
           if(err) {
             result.code = 400;
             result.value = err;
-            result;
+            return;
           }
           result.code = 200;
           result.value = 'Profile updated';
           console.log('Freelancer profile updated');
+          console.log(`Transaction Data - ${doc}`);
         });
 
-        
-          setTimeout(()=>{
+        setTimeout(()=>{
             if(res.code === 200 && result.code === 200 ){
               callback(null, res);
             }

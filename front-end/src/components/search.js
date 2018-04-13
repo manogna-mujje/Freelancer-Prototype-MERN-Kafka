@@ -69,7 +69,7 @@ class Search extends Component {
 
       // Retrieve each item from the array of Project Items
       let projectItems;
-     console.log(typeof(currentItems));
+      console.log(typeof(currentItems));
       projectItems = currentItems.map((project, index) => {
           return (
               <ProjectItem key={index} project={project} user={this.props.user} currentUser = {this.props.currentUser}/>

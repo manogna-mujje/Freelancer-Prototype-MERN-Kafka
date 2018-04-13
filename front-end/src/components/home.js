@@ -22,7 +22,7 @@ class Home extends Component {
             this.setState({
                 user: this.props.currentUser.user.firstName
             })
-        })
+        });
         API.showProjects().then((res) => {
             res.json().then((data) => {
                 this.setState({

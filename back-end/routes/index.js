@@ -257,6 +257,44 @@ router.post('/hireFreelancer', function(req, res, next){
   });
 });
 
+/* Credit Account */
+router.post('/creditAccount', function(req, res, next){
+  console.log('Credit Account API hit');
+  kafka.make_request('payment',{
+    username: req.session.passport.user.username,
+    amount: req.body.amount
+}, function(err,results){
+  console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
+  });
+});
+
+/* Make Payment */
+router.post('/makePayment', function(req, res, next){
+  console.log('Make Payment API hit');
+  kafka.make_request('payTransfer',{
+    employer: req.session.passport.user.username,
+    project: req.body.project,
+    amount: req.body.amount,
+    freelancer: req.body.freelancer
+}, function(err,results){
+  console.log('In Kafka: %o', results);
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
+  });
+});
+
 function checkAuth() {
     return(req, res, next) => {
       if(req.isAuthenticated()) {
