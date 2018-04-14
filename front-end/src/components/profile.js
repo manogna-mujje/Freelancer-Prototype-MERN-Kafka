@@ -3,8 +3,6 @@ import * as API from '../APIs/api';
 import { checkSession } from '../actions/index';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import CreditAmount from './credit';
-import DebitAmount from './debit';
 
 class Profile extends Component {
     constructor(props){
@@ -19,7 +17,7 @@ class Profile extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        // this.txnManager = this.txnManager.bind(this);
+        this.txnManager = this.txnManager.bind(this);
     }
 
     componentDidMount(){
@@ -85,9 +83,9 @@ class Profile extends Component {
                           });
     }
 
-    // txnManager(){
-        
-    // }
+    txnManager(){
+        this.props.history.push('/txnManager/'+this.props.match.params.user);
+    }
 
     render(){
         return(
@@ -104,7 +102,7 @@ class Profile extends Component {
                         <p> Country: {this.state.user.country}</p><br/>
                         <p> Email: {this.state.user.email}</p><br/>
                         <p> Phone: {this.state.user.phone}</p><br/>
-                        
+                        <button onClick={this.txnManager}> Transaction Manager </button>
                     </div> :
                     <div id = "editable-profile">  
                         <div id="profile-picture"> 
@@ -130,9 +128,6 @@ class Profile extends Component {
                             <input type="submit" />
                         </form>
                         <p id="update-response"> {this.state.message} </p>
-                        <CreditAmount /> 
-                        <br/>
-                        <DebitAmount />
                     </div> 
                 }
             </div>

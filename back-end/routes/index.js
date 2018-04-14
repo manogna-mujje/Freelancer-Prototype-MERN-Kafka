@@ -313,6 +313,25 @@ router.post('/makePayment', function(req, res, next){
   });
 });
 
+/* View Transaction History */
+router.get('/viewTransactionHistory', function(req, res, next){
+  console.log('View Transaction History API hit');
+  if (req.isAuthenticated()) {
+    kafka.make_request('anyRequest',{
+      action: 'view-txn-history',
+      username: req.session.passport.user.username
+    }, function(err,results){
+    console.log('In Kafka: %o', results);
+      if(err){
+        res.send(err).status(results.code);
+      }
+      else
+      {
+        res.send(results).status(results.code);
+      }
+    });
+  } 
+});
 
 function checkAuth() {
     return(req, res, next) => {

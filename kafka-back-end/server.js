@@ -18,7 +18,7 @@ var hire = require('./services/hire');
 var payment = require('./services/payment');
 var withdrawl = require('./services/withdrawl');
 var payTransfer = require('./services/pay-transfer');
-// var txnHistory = require('./services/transaction-history');
+var txnHistory = require('./services/transaction-history');
 
 
 // Add MongoDB connections
@@ -106,6 +106,8 @@ consumer.on('message',  (message) => {
         case 'anyRequest':
             if(data.data.action === 'show-project-details'){
                 handler = projectDetails;
+            } else if(data.data.action === 'view-txn-history'){
+                handler = txnHistory;
             } else {
                 handler = bids;
             }

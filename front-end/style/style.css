@@ -459,3 +459,22 @@ div#hire-button {
   background: white;
   padding: 20px;
 }
+
+#txn-item li {
+  float: left;
+  padding: 7px;
+}
+
+#txnManager ul {
+  padding: 0px;
+}
+
+#txn-history-header li{
+  float: left;
+
+}
+
+#pie-chart {
+  height: 300px;
+  width: 300px;
+}

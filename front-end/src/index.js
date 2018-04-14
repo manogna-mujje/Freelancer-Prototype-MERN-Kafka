@@ -35,7 +35,7 @@ ReactDOM.render(
           <Route path="/dashboard" component={Home} />
           <Route path="/post-project" component={PostProject} />
           <Route path="/profile/:user" component={Profile} />
-          <Route path="/profile/:user/txnManager" component={TransactionManager} />
+          <Route path="/txnManager/:user" component={TransactionManager} />
           <Route path="/projects/:name" component={Project} />
           <Route exact path="/" component={App} />
         </Switch>
