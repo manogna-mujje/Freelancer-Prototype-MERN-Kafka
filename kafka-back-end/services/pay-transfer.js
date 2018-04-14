@@ -6,16 +6,16 @@ function handle_request(msg, collection, callback){
       collection.update(
             { username: msg.employer, "postedProjects.name": msg.project}, 
             {  $inc: {
-                    amount: parseInt(msg.amount)
+                    amount: -parseInt(msg.amount)
                 },
                 $set : {   
-                "postedProjects.$.paymentStatus": "done",
-                "postedProjects.$.status": "closed"   
-            }
-                
+                    "postedProjects.$.paymentStatus": "done",
+                    "postedProjects.$.status": "closed"   
+                },
+                $currentDate: { "postedProjects.$.lastTransferred": true }
             },
             (err, doc) => {
-                console.log(`Transaction Data - ${doc}`);
+                console.log(`Employer Debit Transaction Data - ${doc}`);
                 if(err) {
                     res.code = 400;
                     res.value = err;
@@ -28,18 +28,21 @@ function handle_request(msg, collection, callback){
         );
         
     let projects = 'assignedProjects.'+msg.project+'.paymentStatus';
+    let paytime = 'assignedProjects.'+msg.project+'.lastTransferred';
+
     var result = {};
       console.log(projects);
       collection.update(
         { username: msg.freelancer }, 
         {   $inc: 
             {
-                amount: -parseInt(msg.amount)
+                amount: parseInt(msg.amount)
             }, 
             $set: 
             {
                 [projects]: "done"
-            }
+            },
+            $currentDate: { [paytime]: true }
         },  
         (err, doc) => {
           if(err) {
@@ -50,7 +53,7 @@ function handle_request(msg, collection, callback){
           result.code = 200;
           result.value = 'Profile updated';
           console.log('Freelancer profile updated');
-          console.log(`Transaction Data - ${doc}`);
+          console.log(`Freelancer Credit Transaction Data - ${doc}`);
         });
 
         setTimeout(()=>{

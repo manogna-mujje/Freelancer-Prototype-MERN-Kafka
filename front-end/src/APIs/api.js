@@ -277,3 +277,36 @@ export const makePayment = function (project, freelancer, amount){
             })
           })
 };
+
+/* View Transaction Details */
+export const viewTransactionHistory = function (project, employer){
+  url = `${api}/viewTransactionHistory`;
+  return fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              project, employer
+            })
+          });
+};
+
+/* Withdraw amount */
+
+export const debitAmount = function (amount){
+  url = `${api}/debitAmount`;
+  return fetch(url, {
+            method: 'POST',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+              amount
+            })
+          })
+};

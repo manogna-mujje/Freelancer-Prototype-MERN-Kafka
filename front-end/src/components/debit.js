@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
-import Payment from './payment';
+import Withdrawl from './withdrawl';
 
-class CreditAmount extends Component {
+class DebitAmount extends Component {
     constructor(props){
         super(props);
         this.state = {
             showPopup: false
         }
-        this.creditAmount = this.creditAmount.bind(this);
+        this.debitAmount = this.debitAmount.bind(this);
     }
 
-    creditAmount() {
+    debitAmount() {
         this.setState({
             showPopup: !this.state.showPopup
         })
@@ -18,16 +18,16 @@ class CreditAmount extends Component {
 
     render() {
         return(
-            <div id="employer-view">
+            <div id="profiler-view">
                 <br/>
-                <label> Credit Amount to your account: </label> <br/>
+                <label> Withdraw Amount from your account: </label> <br/>
                 <input type="text" ref="amount" placeholder="Enter an amount" /><br/><br />
-                <button id="credit-amount-button" onClick = { this.creditAmount } >
-                    Credit Account
+                <button id="debit-amount-button" onClick = { this.debitAmount } >
+                    Withdraw Amount
                 </button>
                 {   this.state.showPopup ? 
-                    <Payment
-                        closePopup={this.creditAmount}
+                    <Withdrawl
+                        closePopup={this.debitAmount}
                         amount = {this.refs.amount.value}
                     />  :
                     null
@@ -37,4 +37,4 @@ class CreditAmount extends Component {
     }
 }
 
-export default CreditAmount;
+export default DebitAmount;

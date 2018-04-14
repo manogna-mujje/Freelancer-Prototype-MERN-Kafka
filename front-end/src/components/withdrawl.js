@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as API from '../APIs/api';
 
-class Payment extends Component {
+class Withdrawl extends Component {
     constructor(props){
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -9,8 +9,8 @@ class Payment extends Component {
 
     handleSubmit(event){
         console.log(this.props.currentUser);
-        API.creditAccount(this.props.amount).then((res)=> {
-            document.getElementById('payment-status').innerHTML = 'Amount credited to your account successfully.';
+        API.debitAmount(this.props.amount).then((res)=> {
+            document.getElementById('payment-status').innerHTML = 'Amount withdrawn successfully.';
         });
         event.preventDefault();
     }
@@ -21,16 +21,13 @@ class Payment extends Component {
         <div className='popup'>
             <div className='popup_inner'>
                 <div id="card-payment">
-                    <h4> <strong> Please enter your card details: </strong> </h4>
+                    <h4> <strong> Please enter your Bank details: </strong> </h4>
                     <div className="Payment-Fields"> 
-                        <input ref="name" placeholder="Name on card" /> <br /> <br />
-                        <input ref="card-number" placeholder="Card Number" /> <br /> <br />
+                        <input ref="name" placeholder="Account holder Name" /> <br /> <br />
+                        <input id="bank" ref="bank" placeholder="Bank Name" /> <br /> <br /> 
+                        <input ref="account-number" placeholder="Account Number" /> <br /> 
                     </div>
-                    <div className="private-info"> 
-                        <input id="private-info" ref="expiry" placeholder="Expiry Date" /> 
-                        <input id="private-info" ref="cvv" placeholder="CVV" /> 
-                    </div>
-                    <p id="payment-status">  </p> <br />
+                    <p id="payment-status">  </p> <br /> 
                     <button id="payment-buttons" onClick = {this.handleSubmit}> Confirm </button>
                     <button id="payment-buttons" onClick={this.props.closePopup}> Cancel </button>
                 </div>
@@ -41,4 +38,4 @@ class Payment extends Component {
     }
 }
 
-export default Payment;
+export default Withdrawl;

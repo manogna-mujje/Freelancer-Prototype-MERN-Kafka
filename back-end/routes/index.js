@@ -275,6 +275,24 @@ router.post('/creditAccount', function(req, res, next){
   });
 });
 
+/* Debit Account */
+router.post('/debitAmount', function(req, res, next){
+  console.log('Debit Account API hit');
+  console.log(`DEBIT amount: ${req.body.amount}`);
+  kafka.make_request('withdrawl',{
+    username: req.session.passport.user.username,
+    amount: req.body.amount
+}, function(err,results){
+    if(err){
+      res.send(err).status(results.code);
+    }
+    else
+    {
+      res.send(results).status(results.code);
+    }
+  });
+});
+
 /* Make Payment */
 router.post('/makePayment', function(req, res, next){
   console.log('Make Payment API hit');
@@ -294,6 +312,7 @@ router.post('/makePayment', function(req, res, next){
     }
   });
 });
+
 
 function checkAuth() {
     return(req, res, next) => {

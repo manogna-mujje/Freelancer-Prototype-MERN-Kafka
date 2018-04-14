@@ -4,6 +4,7 @@ import { checkSession } from '../actions/index';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import CreditAmount from './credit';
+import DebitAmount from './debit';
 
 class Profile extends Component {
     constructor(props){
@@ -18,6 +19,7 @@ class Profile extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        // this.txnManager = this.txnManager.bind(this);
     }
 
     componentDidMount(){
@@ -83,51 +85,58 @@ class Profile extends Component {
                           });
     }
 
+    // txnManager(){
+        
+    // }
+
     render(){
-            return(
-                <div id= "profile">
-                    <h1>Hello, {this.props.match.params.user}</h1>
-                    <button className="menu-button" id="logout" onClick={this.handleClick} > Logout </button>
-                    <button className="menu-button" id="edit-profile" onClick={this.handleEdit} > Edit Profile </button>
-                    {(!this.state.isEditable) ?
-                        <div id = "viewable-profile"> 
+        return(
+            <div id= "profile">
+                <h1>Hello, {this.props.match.params.user}</h1>
+                <button className="menu-button" id="logout" onClick={this.handleClick} > Logout </button>
+                <button className="menu-button" id="edit-profile" onClick={this.handleEdit} > Edit Profile </button>
+                {(!this.state.isEditable) ?
+                    <div id = "viewable-profile"> 
+                        <img id="pic" src={this.state.imageURL} alt="img" />
+                        <p> First Name: {this.state.user.firstName}</p><br/>
+                        <p> Last Name: {this.state.user.lastName}</p><br/>
+                        <p> Location: {this.state.user.location}</p><br/>
+                        <p> Country: {this.state.user.country}</p><br/>
+                        <p> Email: {this.state.user.email}</p><br/>
+                        <p> Phone: {this.state.user.phone}</p><br/>
+                        
+                    </div> :
+                    <div id = "editable-profile">  
+                        <div id="profile-picture"> 
+                            <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
                             <img id="pic" src={this.state.imageURL} alt="img" />
-                            <p> First Name: {this.state.user.firstName}</p><br/>
-                            <p> Last Name: {this.state.user.lastName}</p><br/>
-                            <p> Location: {this.state.user.location}</p><br/>
-                            <p> Country: {this.state.user.country}</p><br/>
-                            <p> Email: {this.state.user.email}</p><br/>
-                            <p> Phone: {this.state.user.phone}</p><br/>
-                        </div> :
-                        <div id = "editable-profile">  
-                            <div id="profile-picture"> 
-                                <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
-                                <img id="pic" src={this.state.imageURL} alt="img" />
+                        </div>
+                        <button id="upload-button" onClick={this.handleUpload}> 
+                            Upload
+                        </button>
+                        <form className="profile-form" onSubmit={this.handleSubmit}>
+                            <div id="fields"> 
+                                <label> First Name </label> <br/>
+                                <input type="text" ref="fname" placeholder="First Name" /><br/>
+                                <label> Last Name </label><br/>
+                                <input type="text" ref="lname" placeholder="Last Name" /><br/>
+                                <label> Location </label><br/>
+                                <input type="text" ref="location" placeholder="Location" /><br/>
+                                <label> Country </label><br/>
+                                <input type="text" ref="country" placeholder="Country" /><br/>
+                                <label> Phone Number </label><br/>
+                                <input type="text" ref="phone" placeholder="Phone Number" />
                             </div>
-                            <button id="upload-button" onClick={this.handleUpload}> 
-                                Upload
-                            </button>
-                            <form className="profile-form" onSubmit={this.handleSubmit}>
-                                <div id="fields"> 
-                                    <label> First Name </label> <br/>
-                                    <input type="text" ref="fname" placeholder="First Name" /><br/>
-                                    <label> Last Name </label><br/>
-                                    <input type="text" ref="lname" placeholder="Last Name" /><br/>
-                                    <label> Location </label><br/>
-                                    <input type="text" ref="location" placeholder="Location" /><br/>
-                                    <label> Country </label><br/>
-                                    <input type="text" ref="country" placeholder="Country" /><br/>
-                                    <label> Phone Number </label><br/>
-                                    <input type="text" ref="phone" placeholder="Phone Number" />
-                                </div>
-                                <input type="submit" />
-                            </form>
-                            <p id="update-response"> {this.state.message} </p>
-                            <CreditAmount />
-                        </div> 
-                    }
-                </div>
-            );
+                            <input type="submit" />
+                        </form>
+                        <p id="update-response"> {this.state.message} </p>
+                        <CreditAmount /> 
+                        <br/>
+                        <DebitAmount />
+                    </div> 
+                }
+            </div>
+        );
     }
 }
 

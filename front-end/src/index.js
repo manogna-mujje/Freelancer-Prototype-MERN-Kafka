@@ -14,6 +14,7 @@ import Profile from './components/profile';
 import Home from './components/home';
 import PostProject from './components/post-project';
 import Project from './components/project';
+import TransactionManager from './components/txnManager';
 import reducers from './reducers';
 import PropTypes from 'prop-types';
 
@@ -34,6 +35,7 @@ ReactDOM.render(
           <Route path="/dashboard" component={Home} />
           <Route path="/post-project" component={PostProject} />
           <Route path="/profile/:user" component={Profile} />
+          <Route path="/profile/:user/txnManager" component={TransactionManager} />
           <Route path="/projects/:name" component={Project} />
           <Route exact path="/" component={App} />
         </Switch>

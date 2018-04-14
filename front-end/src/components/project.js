@@ -9,6 +9,7 @@ import { detailsTabClick } from '../actions';
 import ProjectItem from './projectItem';
 import BidItem from './bidItem';
 import Payment from './payment';
+import TransactionBills from './transactionBills';
 
 
 class Project extends Component {
@@ -62,6 +63,11 @@ class Project extends Component {
 
     makePayment() {
         API.makePayment(this.props.match.params.name, this.state.freelancer, this.state.salary).then ((res) => {
+            // this.props.checkSession().then((res)=> {
+            //     this.setState({
+            //         user: this.props.currentUser
+            //     })
+            // });
             document.getElementById('payment-status').innerHTML = "Payment successfully made to Freelancer"
         })
     }
@@ -217,10 +223,16 @@ class Project extends Component {
                         { this.state.isEmployer &&
                             <div id="employer-view">
                                 <br/>
-                                <button id="file-upload-button" onClick = { this.makePayment } >
+                                <button id="make-payment-button" onClick = { this.makePayment } >
                                     Make Payment
-                                </button>
+                                </button> <br />
                                 <p id="payment-status"> </p>
+                            </div>
+                        }
+                        {
+                            (this.state.isEmployer || this.state.isFreelancer) &&
+                            <div> 
+                                <TransactionBills user= {this.state.user} project={this.props.match.params.name} isEmployer={this.state.isEmployer} isFreelancer={this.state.isFreelancer} />
                             </div>
                         }
                     </div>

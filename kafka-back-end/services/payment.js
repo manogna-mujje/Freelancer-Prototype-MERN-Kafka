@@ -3,9 +3,11 @@ function handle_request(msg, collection, callback){
     console.log("In handle request:"+ JSON.stringify(msg));
     collection.findOneAndUpdate(
     { username: msg.username}, 
-    { $inc: {
+    { $inc: 
+      {
         amount: parseInt(msg.amount)
-      }
+      },
+      $currentDate: { lastAdded: true }
     }, (err, doc) => {
       if(err) {
         res.code = 400;

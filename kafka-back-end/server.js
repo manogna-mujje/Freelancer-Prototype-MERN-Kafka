@@ -16,12 +16,19 @@ var postBid = require('./services/post-bid');
 var persistedLogin = require('./services/persisted-login.js');
 var hire = require('./services/hire');
 var payment = require('./services/payment');
-var payTransfer = require('./services/pay-transfer')
+var withdrawl = require('./services/withdrawl');
+var payTransfer = require('./services/pay-transfer');
+// var txnHistory = require('./services/transaction-history');
 
 
 // Add MongoDB connections
 const MongoClient = require('mongodb').MongoClient;
+
+// Local MongoDB connection
 var mongoURL = 'mongodb://localhost:27017/Freelancer';
+
+// Cloud MongoDB connection on  mLab
+// var mongoURL = 'mongodb://admin:password@ds139342.mlab.com:39342/freelancer';
 
 var collection;
 
@@ -35,7 +42,7 @@ MongoClient.connect(mongoURL, function (err, db) {
 });
 
 // Add additional topics
-consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'hire','postBid', 'payment', 'payTransfer','anyRequest'], function (err, added) {
+consumer.addTopics(['profileUpdate', 'showProjects', 'postProject', 'hire','postBid', 'payment', 'withdrawl', 'payTransfer','anyRequest'], function (err, added) {
     if(err) {
         console.log(`AddTopics Error: ${err}`);
     } else if(added){
@@ -108,6 +115,9 @@ consumer.on('message',  (message) => {
             break;
         case 'payment':
             handler = payment;
+            break;
+        case 'withdrawl':
+            handler = withdrawl;
             break;
         case 'payTransfer':
             handler = payTransfer;

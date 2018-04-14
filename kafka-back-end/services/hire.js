@@ -15,7 +15,7 @@ function handle_request(msg, collection, callback){
                 },
                 $set : 
                 {
-                    "postedProjects.$.status" : "In progress"
+                    "postedProjects.$.status" : "hired"
                 }
             },
             (err, doc) => {

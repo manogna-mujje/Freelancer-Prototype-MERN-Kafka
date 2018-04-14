@@ -448,3 +448,14 @@ div#hire-button {
   float: left;
   padding-right: 10px;
 }
+
+.txnHistory {
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 35%;
+  bottom: 35%;
+  margin: auto;
+  background: white;
+  padding: 20px;
+}
