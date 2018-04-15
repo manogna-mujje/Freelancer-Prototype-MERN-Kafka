@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import ProjectItem from './projectItem';
+import NavigationBar from './navigationBar';
+import * as API from '../APIs/api';
 
 class Search extends Component {
     constructor(props){
         super(props);
         this.state = {
-            initialItems: this.props.projects,
+            initialItems: [],
             currentPage: 1,
             itemsPerPage: 4,
             items: []
@@ -13,6 +15,8 @@ class Search extends Component {
         console.log(this.props);
         this.filterList = this.filterList.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleMyProjects = this.handleMyProjects.bind(this);
+        this.handleMyBids = this.handleMyBids.bind(this);
     }
 
     handleClick(event) {
@@ -22,9 +26,39 @@ class Search extends Component {
     }
     
     componentWillMount(){
-      this.setState({
-          items: this.state.initialItems
-      });
+      API.showProjects().then((res) => {
+        res.json().then((data) => {
+            this.setState({
+              items: data,
+              initialItems: data
+            })
+        })
+      })
+    }
+
+    handleMyProjects(){
+        console.log('My projects function');
+        API.myProjects().then((res)=>{
+            res.json().then((data) => {
+                this.setState({
+                  initialItems: data,
+                  items: data
+                })
+            })
+        })
+    }
+
+    handleMyBids(){
+        console.log('My Bids function');
+        API.myBids().then((res)=>{
+            res.json().then((data) => {
+                console.log(data);
+                this.setState({
+                  initialItems: data,
+                  items: data
+                })
+            })
+        })
     }
 
     filterList(event) {
@@ -51,6 +85,8 @@ class Search extends Component {
   }
 
     render(){
+      console.log('Rendering...')
+      console.log(this.state.initialItems);
       let filteredItems = this.state.items;
 
       // Logic for displaying current page items
@@ -69,8 +105,9 @@ class Search extends Component {
 
       // Retrieve each item from the array of Project Items
       let projectItems;
-      console.log(typeof(currentItems));
+      console.log(currentItems);
       projectItems = currentItems.map((project, index) => {
+          console.log(project)
           return (
               <ProjectItem key={index} project={project} user={this.props.user} currentUser = {this.props.currentUser}/>
           );
@@ -100,6 +137,7 @@ class Search extends Component {
         
         return (
             <div className="filter-list">
+            <NavigationBar myProjects={this.handleMyProjects} myBids={this.handleMyBids}/> <br />
               <form>
               <fieldset className="form-group">
               <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filterList}/>

@@ -19,6 +19,8 @@ var payment = require('./services/payment');
 var withdrawl = require('./services/withdrawl');
 var payTransfer = require('./services/pay-transfer');
 var txnHistory = require('./services/transaction-history');
+var myBids = require('./services/myBids');
+var myProjects = require('./services/myProjects')
 
 
 // Add MongoDB connections
@@ -108,6 +110,10 @@ consumer.on('message',  (message) => {
                 handler = projectDetails;
             } else if(data.data.action === 'view-txn-history'){
                 handler = txnHistory;
+            } else if(data.data.action === 'my-bids'){
+                handler = myBids;
+            } else if(data.data.action === 'my-projects'){
+                handler = myProjects;
             } else {
                 handler = bids;
             }

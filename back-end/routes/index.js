@@ -333,6 +333,46 @@ router.get('/viewTransactionHistory', function(req, res, next){
   } 
 });
 
+/* Get all my Bids */
+router.get('/myBids', function(req, res, next){
+  console.log('Get all my Bids API hit');
+  if (req.isAuthenticated()) {
+    kafka.make_request('anyRequest',{
+      action: 'my-bids',
+      username: req.session.passport.user.username
+    }, function(err,results){
+    console.log('In Kafka: %o', results);
+      if(err){
+        res.send(err).status(results.code);
+      }
+      else
+      {
+        res.send(results.value).status(results.code);
+      }
+    });
+  } 
+});
+
+/* Get all my projects */
+router.get('/myProjects', function(req, res, next){
+  console.log('Get all my projects API hit');
+  if (req.isAuthenticated()) {
+    kafka.make_request('anyRequest',{
+      action: 'my-projects',
+      username: req.session.passport.user.username
+    }, function(err,results){
+    console.log('In Kafka: %o', results);
+      if(err){
+        res.send(err).status(results.code);
+      }
+      else
+      {
+        res.send(results.value).status(results.code);
+      }
+    });
+  } 
+});
+
 function checkAuth() {
     return(req, res, next) => {
       if(req.isAuthenticated()) {

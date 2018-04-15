@@ -324,3 +324,27 @@ export const viewTransactionHistory = function (){
             credentials: 'include',
           })
 };
+
+export const myProjects = function (){
+  url = `${api}/myProjects`;
+  return fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          })
+};
+
+export const myBids = function (){
+  url = `${api}/myBids`;
+  return fetch(url, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+          })
+};

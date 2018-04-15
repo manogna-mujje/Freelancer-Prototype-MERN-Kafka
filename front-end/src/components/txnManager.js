@@ -31,6 +31,8 @@ class TransactionManager extends Component {
     }
 
     render() {
+        console.log(this.state.expenses);
+        console.log(this.state.income);
         var outTransactionItems, inTransactionItems;
         console.log(this.state.outTransactions);
         let outTxns = this.state.outTransactions;

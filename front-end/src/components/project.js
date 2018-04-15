@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import * as API from '../APIs/api';
-import Menu from './menu' 
+import Menu from './menu';
 import {checkSession} from '../actions/index';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';

@@ -83,7 +83,7 @@ class Popup extends Component {
     )
     event.preventDefault();
     }
-    
+
 
     render() {
         console.log(this.props.user);

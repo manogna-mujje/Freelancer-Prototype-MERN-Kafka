@@ -16,7 +16,8 @@ function handle_request(msg, collection, callback){
         docs.forEach(function(doc) {
             doc.postedProjects.forEach((item)=>{
                 if('lastTransferred' in item){
-                    res.outAmount = res.outAmount + item.hired[0].bidAmount;
+                    res.outAmount = res.outAmount + parseInt(item.hired[0].bidAmount);
+                    console.log(res.outAmount);
                     res.outValue.push({
                         project: item.name,
                         amount: item.hired[0].bidAmount,
@@ -39,13 +40,10 @@ function handle_request(msg, collection, callback){
         let obj = docs.assignedProjects;
         for (var docKey in docs) {
             if (docs.hasOwnProperty(docKey)) {
-                console.log('I AM A VERY GOOD GIRL...VINNANAVA MR.....MY DEAR BROTHER');
-                console.log(typeof(docs[docKey]));
-                console.log(docs[docKey].assignedProjects);
                 let projects = docs[docKey].assignedProjects;
                 for(var key in projects){
                     if (projects.hasOwnProperty(key)) {
-                        res.inAmount = res.inAmount + projects[key].bidAmount;
+                        res.inAmount = res.inAmount + parseInt(projects[key].bidAmount);
                         res.inValue.push({
                             project: projects[key].project,
                             amount: projects[key].bidAmount,
