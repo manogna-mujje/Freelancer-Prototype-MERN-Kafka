@@ -5,8 +5,10 @@
   "main": "index.js",
   "repository": "git@github.com:StephenGrider/ReduxSimpleStarter.git",
   "scripts": {
-    "start": "nodemon ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
-    "test": "NODE_ENV=test mocha test/**/*.js"
+    "dev": "nodemon ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "test": "NODE_ENV=test mocha test/**/*.js",
+    "postinstall": "webpack -p",
+    "start": "node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +30,7 @@
     "babel-preset-stage-1": "^6.1.18",
     "express-fileupload": "^0.4.0",
     "lodash": "^3.10.1",
+    "nodemon": "^1.17.3",
     "prop-types": "^15.6.1",
     "react": "^0.14.9",
     "react-d3-basic": "^1.6.11",

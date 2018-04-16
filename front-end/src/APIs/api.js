@@ -1,9 +1,10 @@
 import { withRouter } from 'react-router-dom';
-const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://localhost:3001';
+const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://18.144.51.236:3001';
 
 var url;
 
 export const validateSignup = function (email, username, password, object){
+  console.log(`API: ${api}`);
     url = `${api}/signup`;
     fetch(url, {
               method: 'POST',

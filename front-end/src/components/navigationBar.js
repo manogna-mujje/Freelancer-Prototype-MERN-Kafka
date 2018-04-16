@@ -12,40 +12,7 @@ class NavigationBar extends Component {
             // this.props.history.push('/dashboard');
             window.location.reload();
         }
-        //     return;
-        // } else if(event.target.id === 'my-projects'){
-        //     console.log('my projects tab');
-        //     this.props.myProjects();
-        // } else if (event.target.id === 'my-bids') {
-        //     console.log('my bids tab');
-        //     this.props.myBids();
-        // }
     }
-
-    // handleMyProjects(){
-    //     console.log('My projects function');
-    //     API.myProjects().then((res)=>{
-    //         res.json().then((data) => {
-    //             this.setState({
-    //                 projects: data,
-    //                 arrived: true
-    //             })
-    //         })
-    //     })
-    // }
-
-    // handleMyBids(){
-    //     console.log('My Bids function');
-    //     API.myBids().then((res)=>{
-    //         res.json().then((data) => {
-    //             console.log(data);
-    //             this.setState({
-    //                 projects: data,
-    //                 arrived: true
-    //             })
-    //         })
-    //     })
-    // }
 
     render() {
         return (
