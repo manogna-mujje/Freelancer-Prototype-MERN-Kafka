@@ -23,7 +23,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: './',
     headers: {
-      'Access-Control-Allow-Origin': 'http://localhost:8080',
+      'Access-Control-Allow-Origin': 'https://freelancer-mern-frontend.herokuapp.com',
       'Access-Control-Allow-Credentials': "omit"
     }
   }

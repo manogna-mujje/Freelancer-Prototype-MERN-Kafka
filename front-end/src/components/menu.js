@@ -20,8 +20,8 @@ class Menu extends Component {
                     <div id="right-menu">
                         <ul>
                             <li><Link to ="/post-project" className="menu-button" >Post a Project </Link></li> 
-                            <li> <a href="http://localhost:8080/signup"> Sign Up </a> </li>
-                            <li><a href="http://localhost:8080/login">Log In</a></li>
+                            <li> <a href="https://freelancer-mern-frontend.herokuapp.com/signup"> Sign Up </a> </li>
+                            <li><a href="https://freelancer-mern-frontend.herokuapp.com/login">Log In</a></li>
                         </ul>     
                     </div>   
                 </header>
