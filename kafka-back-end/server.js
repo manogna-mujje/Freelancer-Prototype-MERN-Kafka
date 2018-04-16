@@ -27,10 +27,10 @@ var myProjects = require('./services/myProjects')
 const MongoClient = require('mongodb').MongoClient;
 
 // Local MongoDB connection
-var mongoURL = 'mongodb://localhost:27017/Freelancer';
+//var mongoURL = 'mongodb://localhost:27017/Freelancer';
 
 // Cloud MongoDB connection on  mLab
-// var mongoURL = 'mongodb://admin:password@ds139342.mlab.com:39342/freelancer';
+ var mongoURL = 'mongodb://admin:password@ds139342.mlab.com:39342/freelancer';
 
 var collection;
 

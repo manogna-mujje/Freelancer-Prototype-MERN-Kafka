@@ -7,7 +7,7 @@ var http = require('http');
 var passport = require('passport');
 var index = require('./routes/index');
 var session = require("express-session");
-var mongoSessionURL = "mongodb://localhost:27017/sessions";
+var mongoSessionURL = "mongodb://admin:password@ds049548.mlab.com:49548/sessions";
 var mongoStore = require("connect-mongo")(session);
 var fs = require('fs');
 
@@ -43,7 +43,7 @@ app.use(passport.session());
 
 //Cross-Origin connection
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", '*');
+  res.header("Access-Control-Allow-Origin", 'http://18.144.51.236:8080/');
   res.header("Access-Control-Allow-Credentials", "true");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
@@ -51,7 +51,7 @@ app.use(function(req, res, next) {
 });
 
 app.use(cors({
-  origin: 'http://localhost:8080',
+  origin: 'http://18.144.51.236:8080/',
   credentials: true
 }));
 
