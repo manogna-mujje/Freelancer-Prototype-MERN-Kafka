@@ -23,7 +23,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: './',
     headers: {
-      'Access-Control-Allow-Origin': 'http://18.144.51.236:8080',
+      'Access-Control-Allow-Origin': 'http://54.151.54.81:8080',
       'Access-Control-Allow-Credentials': "omit"
     }
   }

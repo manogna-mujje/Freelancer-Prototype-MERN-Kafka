@@ -1,5 +1,5 @@
 import { withRouter } from 'react-router-dom';
-const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://18.144.51.236:3001';
+const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://54.151.54.81:3001';
 
 var url;
 
