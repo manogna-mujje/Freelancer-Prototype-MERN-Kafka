@@ -25,7 +25,7 @@ class Signup extends Component {
         setTimeout(()=>{
             if(this.state.signedUp){
                 this.props.history.push({
-                    pathname: '/profile/' + username
+                    pathname: '/login'
                 })
             }
         },800);
