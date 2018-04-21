@@ -20,7 +20,7 @@ class BidItem extends Component {
       <div id="bid-item">
           <div>
             <div > 
-                <img id="pic" src={ `http://localhost:3001/public/${bidder}.jpg`} alt="img" />
+                <img id="pic" src={ `http://54.151.54.81:3001/public/${bidder}.jpg`} alt="img" />
             </div>
             <div id="bidder-details"> 
               <p> <i> Freelancer: </i> <br />
@@ -29,7 +29,10 @@ class BidItem extends Component {
             </div>
           </div>
         <div  id="hire-button"> 
-        <button id="bid-button" onClick = {this.handleClick.bind(this)}> Hire Now </button>
+        {
+          this.props.isEmployer && 
+          <button id="bid-button" onClick = {this.handleClick.bind(this)}> Hire Now </button>
+        }
         </div>
       </div>
     );

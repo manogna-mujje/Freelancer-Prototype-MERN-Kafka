@@ -10,10 +10,8 @@ class Menu extends Component {
                         <ul>
                             <div id="logo">
                             <Link to = "/"><img src="logo.png"/></Link>
-                            </div>
-                            
+                            </div>   
                             <li><a href="https://www.google.com">Hire Freelancers</a></li> 
-                            <li><a href="https://www.google.com">Find Work</a></li>
                             <li><a href="https://www.google.com">How it works</a></li>   
                         </ul>
                     </div>

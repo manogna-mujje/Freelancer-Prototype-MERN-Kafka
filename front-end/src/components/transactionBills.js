@@ -63,10 +63,9 @@ class TransactionBills extends Component {
         // console.log(this.props.freelancer);
         return(
             <div id="employer-view">
-                <br/>
-                <button id="transaction-history-button" onClick = { this.viewHistory } >
+                <button type="button" className="btn btn-primary" id="edit-profile" onClick={this.viewHistory}>
                     View Transaction History
-                </button>
+                </button> <br />
                 {   this.state.showPopup ? 
                     <TransactionHistory
                         closePopup={this.viewHistory}

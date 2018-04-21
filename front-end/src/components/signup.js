@@ -21,14 +21,16 @@ class Signup extends Component {
         var username = document.getElementById('id-username').value;
         var password = document.getElementById('id-password').value;
 
-        API.validateSignup(email, username, password, this);
-        setTimeout(()=>{
-            if(this.state.signedUp){
+        API.validateSignup(email, username, password, this).then(res => {
+            console.log(res);
+            if(res.status === 200){
                 this.props.history.push({
                     pathname: '/login'
                 })
+            } else if (res.status === 400){
+                document.getElementById('error-message').style.display = "block";
             }
-        },800);
+        });
         event.preventDefault();
     }
     
@@ -79,7 +81,8 @@ class Signup extends Component {
                 <div className="signupForm" name="signupForm">
                     <form onSubmit={this.handleSubmit}>
                          <h4> Sign Up for <i> free </i> today! </h4> <br/>
-                        <input
+                         <p id="error-message"> Something went wrong. Please try again. </p>
+                         <input
                             className="inputField" type="email" id= "id-email"  name="email"  placeholder="Email Address"
                             onChange={this.handleChange}
                         /> <br />
@@ -92,8 +95,6 @@ class Signup extends Component {
                             onChange={this.handleChange}
                         /> <br />
                         <p className="message" id="password-message"> {this.handleOutput('password')} </p>
-                        <input type="radio" name="accountType" value="hire"> Hire </input>
-                        <input type="radio" name="accountType" value="work"> Work </input> <br/>
                         <input className="inputField" id="submit" type="submit" value="Create Account" /> 
                     </form>
                     <div className="form-footer"> By registering you confirm that you accept the <span> <a href= 'https://www.google.com/'> Terms and Conditions </a> </span> and <span> <a href= 'https://www.google.com/'>Privacy Policy </a> </span></div>

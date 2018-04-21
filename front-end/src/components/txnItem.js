@@ -14,7 +14,6 @@ class TransactionItem extends Component {
   render() {
       console.log(this.props.txn);
       var userProfile;
-    //   console.log(this.props.bid.bidderEmail);
     let project = this.props.txn.project;
     let linkToProject = '/projects/'+ project;
     if(this.props.txn.freelancer){
@@ -23,16 +22,16 @@ class TransactionItem extends Component {
         userProfile = this.props.txn.employer;
     }
     let linkToBidder = '/profile/'+ userProfile;
-    //   let bidAmount = this.props.bid.bidAmount;
     return (
-      <div id="txn-item">
-        <ul>
-            <li> <Link to={linkToProject}> {project}  </Link> </li>
-            <li> <Link to={linkToBidder}> {userProfile} </Link> </li>
-            <li> {this.props.txn.amount} </li>
-            <li> {this.props.txn.lastTransferred} </li>
-        </ul>
-      </div>
+         <tbody id="txn-item">
+            <tr>
+            <th scope="row">{this.props.rowNum}</th>
+            <td><Link to={linkToProject}> {project}  </Link></td>
+            <td><Link to={linkToBidder}> {userProfile} </Link></td>
+            <td>{this.props.txn.amount}</td>
+            <td>{this.props.txn.lastTransferred}</td>
+            </tr>
+        </tbody>
     );
   }
 }

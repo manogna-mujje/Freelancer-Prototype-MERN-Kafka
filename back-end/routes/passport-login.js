@@ -49,7 +49,7 @@ module.exports = function(passport) {
             else
             {
                 if(results.code == 200){
-                    console.log(`MY TEST results.user: ${JSON.stringify(results.user._id)}`)
+                    console.log(`LOGIN results.user: ${JSON.stringify(results.user._id)}`)
                     const user_id = results.user._id;
                     done(null, results.user);
                 }

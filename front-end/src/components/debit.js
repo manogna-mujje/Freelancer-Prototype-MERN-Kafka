@@ -19,12 +19,17 @@ class DebitAmount extends Component {
     render() {
         return(
             <div id="profiler-view">
-                <br/>
-                <label> Withdraw Amount from your account: </label> <br/>
-                <input type="text" ref="amount" placeholder="Enter an amount" /><br/><br />
-                <button id="debit-amount-button" onClick = { this.debitAmount } >
-                    Withdraw Amount
-                </button>
+                <label> Withdraw Amount from your account:  </label> <br/>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" ref="amount" placeholder="Enter an amount" />
+                    </div>
+                    <div className="col-sm-4">
+                        <button type="button" id="debit-amount-button"  className="btn btn-primary" onClick={this.debitAmount}>
+                        Withdraw Account
+                        </button>
+                    </div>
+                </div>
                 {   this.state.showPopup ? 
                     <Withdrawl
                         closePopup={this.debitAmount}

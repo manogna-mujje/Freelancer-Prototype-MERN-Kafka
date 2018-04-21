@@ -19,12 +19,17 @@ class CreditAmount extends Component {
     render() {
         return(
             <div id="employer-view">
-                <br/>
-                <label> Credit Amount to your account: </label> <br/>
-                <input type="text" ref="amount" placeholder="Enter an amount" /><br/><br />
-                <button id="credit-amount-button" onClick = { this.creditAmount } >
-                    Credit Account
-                </button>
+            <label> Credit Amount to your account: </label> <br/>
+                <div className="row">
+                    <div className="col-sm-3">
+                        <input type="text" className="form-control" ref="amount" placeholder="Enter an amount" />
+                    </div>
+                    <div className="col-sm-4">
+                        <button type="button" id="credit-amount-button"  className="btn btn-primary" onClick={this.creditAmount}>
+                            Credit Account
+                        </button>
+                    </div>
+                </div>
                 {   this.state.showPopup ? 
                     <Payment
                         closePopup={this.creditAmount}

@@ -5,7 +5,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import promiseMiddleware from 'redux-promise-middleware';
 import thunkMiddleware from 'redux-thunk';
-
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 import App from './components/app';
 import Signup from './components/signup';

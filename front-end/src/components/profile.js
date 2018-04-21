@@ -3,6 +3,7 @@ import * as API from '../APIs/api';
 import { checkSession } from '../actions/index';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import NavBar from './bs-navbar';
 
 class Profile extends Component {
     constructor(props){
@@ -17,7 +18,6 @@ class Profile extends Component {
         this.handleEdit = this.handleEdit.bind(this);
         this.handleUpload = this.handleUpload.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.txnManager = this.txnManager.bind(this);
     }
 
     componentDidMount(){
@@ -30,7 +30,7 @@ class Profile extends Component {
                 }
                 console.log(body.user);
                 this.setState({ user: body.user });
-                this.setState({ imageURL: `http://localhost:3001/public/${body.user.username}.jpg`});
+                this.setState({ imageURL: `http://54.151.54.81:3001/public/${body.user.username}.jpg`});
             })
         });
     }
@@ -41,7 +41,7 @@ class Profile extends Component {
         data.append('filename', this.props.user);
         API.upload(data).then((response) => {
             response.json().then((body) => {
-              this.setState({ imageURL: `http://localhost:3001/${body.file}` });
+              this.setState({ imageURL: `http://54.151.54.81:3001/${body.file}` });
             console.log(body);
             });
           });
@@ -83,51 +83,76 @@ class Profile extends Component {
                           });
     }
 
-    txnManager(){
-        this.props.history.push('/txnManager/'+this.props.match.params.user);
-    }
-
     render(){
         return(
             <div id= "profile">
-                <h1>Hello, {this.props.match.params.user}</h1>
-                <button className="menu-button" id="logout" onClick={this.handleClick} > Logout </button>
-                <button className="menu-button" id="edit-profile" onClick={this.handleEdit} > Edit Profile </button>
+                <div className="row">
+                    <div className="col-sm-8">
+                    <h2>Hello, {this.props.match.params.user}</h2>
+                    </div>
+                    <div className="col-sm-4">
+                    <button type="button" id="logout"  className="btn btn-dark" onClick={this.handleClick}>Logout</button>
+                    </div>
+                </div>
+                <br/> 
+                <NavBar user={this.props.match.params.user}/> <br/>
+                <button type="button" id="edit-profile"  className="btn btn-primary" onClick={this.handleEdit}>Edit Profile</button>
                 {(!this.state.isEditable) ?
                     <div id = "viewable-profile"> 
-                        <img id="pic" src={this.state.imageURL} alt="img" />
-                        <p> First Name: {this.state.user.firstName}</p><br/>
-                        <p> Last Name: {this.state.user.lastName}</p><br/>
-                        <p> Location: {this.state.user.location}</p><br/>
-                        <p> Country: {this.state.user.country}</p><br/>
-                        <p> Email: {this.state.user.email}</p><br/>
-                        <p> Phone: {this.state.user.phone}</p><br/>
-                        <button onClick={this.txnManager}> Transaction Manager </button>
+                         <div className="row">
+                            <div className="col-sm-2">
+                                <img id="pic" src={this.state.imageURL} alt="img" />
+                            </div>
+                            <div className="col-sm-10">
+                                <p> First Name: {this.state.user.firstName}</p><br/>
+                                <p> Last Name: {this.state.user.lastName}</p><br/>
+                                <p> Location: {this.state.user.location}</p><br/>
+                                <p> Country: {this.state.user.country}</p><br/>
+                                <p> Email: {this.state.user.email}</p><br/>
+                                <p> Phone: {this.state.user.phone}</p><br/>
+                            </div> 
+                        </div>
+                        <br/>
                     </div> :
                     <div id = "editable-profile">  
-                        <div id="profile-picture"> 
-                            <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
-                            <img id="pic" src={this.state.imageURL} alt="img" />
-                        </div>
-                        <button id="upload-button" onClick={this.handleUpload}> 
-                            Upload
-                        </button>
-                        <form className="profile-form" onSubmit={this.handleSubmit}>
-                            <div id="fields"> 
-                                <label> First Name </label> <br/>
-                                <input type="text" ref="fname" placeholder="First Name" /><br/>
-                                <label> Last Name </label><br/>
-                                <input type="text" ref="lname" placeholder="Last Name" /><br/>
-                                <label> Location </label><br/>
-                                <input type="text" ref="location" placeholder="Location" /><br/>
-                                <label> Country </label><br/>
-                                <input type="text" ref="country" placeholder="Country" /><br/>
-                                <label> Phone Number </label><br/>
-                                <input type="text" ref="phone" placeholder="Phone Number" />
+                        <div className="row">
+                            <div className="col-sm-3">
+                                <div id="profile-picture"> 
+                                    <input ref={(ref) => {this.uploadInput = ref;}} type="file" />
+                                    <img id="pic" src={this.state.imageURL} alt="img" />
+                                </div>
+                                <button type="button" id="upload-button"  className="btn btn-primary" onClick={this.handleUpload}> Upload </button>
                             </div>
-                            <input type="submit" />
-                        </form>
-                        <p id="update-response"> {this.state.message} </p>
+                            <div className="col-sm-9">
+                                <h4> Update your profile: </h4>
+                                <div className="row"></div>
+                                    <form className="col-sm-4" onSubmit={this.handleSubmit}>
+                                    <div className="form-group">
+                                        <label for="fname">First Name:</label>
+                                        <input type="text" className="form-control" ref="fname" placeholder="Enter First Name" />
+                                    </div>
+                                    <div className="form-group">
+                                        <label for="lname">Last Name:</label>
+                                        <input type="text" className="form-control" ref="lname" placeholder="Enter Last Name"  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label for="location">Location:</label>
+                                        <input type="text" className="form-control" ref="location" placeholder="Enter Location"  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label for="country">Country:</label>
+                                        <input type="text" className="form-control" ref="country" placeholder="Enter Country"  />
+                                    </div>
+                                    <div className="form-group">
+                                        <label for="phone">Phone Number:</label>
+                                        <input type="text" className="form-control" ref="phone" placeholder="Enter Phone Number"  />
+                                    </div>
+                                    <button type="submit" className="btn btn-primary">Submit</button>
+                                    </form>
+                                
+                                <p id="update-response"> {this.state.message} </p>
+                            </div>
+                        </div>
                     </div> 
                 }
             </div>

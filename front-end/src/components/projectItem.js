@@ -7,9 +7,20 @@ class ProjectItem extends Component {
   constructor() {
     super();
     this.state = {
-      showPopup: false
+      showPopup: false, 
+      isFreelancer: false
     };
   }
+
+  componentDidMount(){
+    console.log('compWilMount');
+    if (this.props.user !== this.props.project.owner) {
+      this.setState({
+        isFreelancer: true
+      });
+    }
+  }
+
 
   togglePopup() {
     this.setState({
@@ -18,7 +29,12 @@ class ProjectItem extends Component {
   }
 
   render() {
+    console.log('Rendering.....')
     console.log(this.props.project);
+    console.log(this.props.user);
+    console.log(this.props.project.owner);
+    console.log(this.state.isFreelancer);
+   
     let projectName = this.props.project.name;
     let linkToProject = '/projects/'+ projectName;
     let projectOwner = this.props.project.owner;
@@ -36,7 +52,13 @@ class ProjectItem extends Component {
                 {this.props.project.budget} </p>  <br />
                 <p> <i> Employer: </i> <br />
                    <Link to={linkToOwner}> {this.props.project.owner} </Link> </p> 
-                <button id="bid-button" onClick = {this.togglePopup.bind(this)}> Bid Now </button>
+                <div> 
+                  {
+                    this.state.isFreelancer && 
+                    <button id="bid-button" onClick = {this.togglePopup.bind(this)}> Bid Now </button>
+                  }
+                </div>   
+               
                 {this.state.showPopup ? 
                   <Popup
                     project={this.props.project.name}

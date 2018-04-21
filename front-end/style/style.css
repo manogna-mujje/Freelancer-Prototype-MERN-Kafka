@@ -59,9 +59,9 @@
   }
 
   .signup-container{
-    margin-left: 550px;
+    margin-left: 400px;
     margin-top: 150px;
-    position: absolute;
+    position: relative;
     text-align: center;
   }
 
@@ -69,12 +69,14 @@
     border: 1px solid gray;
     background-color: white;
     border-radius:3px;
+    width: 350px;
+    padding-top: 20px;
   }
 
   .login-container {
-    margin-left: 550px;
+    margin-left: 400px;
     margin-top: 200px;
-    position: absolute;
+    position: relative;
     text-align: center;
   }
   .loginForm{
@@ -82,6 +84,7 @@
     background-color: white;
     width: 318px;
     border-radius:3px;
+    padding-top: 20px;
   }
   .inputField {
     margin: 10px;
@@ -142,6 +145,7 @@
     height: 44px;
     border: 1px;
     padding: 0px, 16px;
+    margin-left: 35px;
     position: relative;
     text-align: center;
   }
@@ -237,24 +241,22 @@ div#project-buttons{
 }
 
 #project-title {
+  margin-top: 20px;
   background-color: rgb(26, 28, 44);
   color: white;
   padding: 20px;
   height: 60px;
   padding: 60px;
   font-size: 220%;
+  width: 1000px;
   flex: 1;
 }
 
 .project-details {
-  width: 1440px;
+  width: 1000px;
   margin-bottom: 50px;
 }
 
-div.container {
-  margin-left: 0px;
-  padding-left: 0px;
-}
 
 .ProjectItem {
   border: 1px solid gray;
@@ -311,11 +313,13 @@ li {
 }
 
 #edit-profile {
-  margin-bottom: 10px;
+  float: right;
+  margin-right: 20px;
 }
 
 #profile {
   margin-left: 20px;
+  margin-top : 40px;
 }
 
 #bid-status {
@@ -348,6 +352,7 @@ li {
 #page-numbers {
   list-style: none;
   display: flex;
+  padding: 20px;
 }
 
 #page-numbers > li {
@@ -355,6 +360,7 @@ li {
   color: blue;
   user-select: none;
   cursor: pointer;
+  border: 1px solid blue;
 }
 
 #bid-summary {
@@ -478,3 +484,17 @@ div#hire-button {
   height: 300px;
   width: 300px;
 }
+
+#lavender {
+  background-color: lavender;
+}
+
+#lavenderblush {
+  background-color: lavenderblush;
+}
+
+#bg-img{
+
+  margin-left: -200px;
+}
+

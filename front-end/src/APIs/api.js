@@ -1,12 +1,13 @@
 import { withRouter } from 'react-router-dom';
 const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://54.151.54.81:3001';
+// const api = process.env.REACT_APP_CONTACTS_API_URL || 'http://localhost:3001';
 
 var url;
 
 export const validateSignup = function (email, username, password, object){
   console.log(`API: ${api}`);
     url = `${api}/signup`;
-    fetch(url, {
+    return fetch(url, {
               method: 'POST',
               headers: {
                 'Accept': 'application/json',
@@ -19,21 +20,6 @@ export const validateSignup = function (email, username, password, object){
                   password: password
               })
             })
-            .then(res => {
-                console.log(res);
-                if(res.status === 200){
-                    object.setState({
-                        signedUp: true,
-                        message: 'Signup successful'
-                    })
-                } else if (res.status === 400){
-                    object.setState({
-                        signedUp: false,
-                        message: 'Username already exists.'
-                    })
-                }
-      }); 
-      return true;   
   };
 
   export const validateLogin = function (username, password){

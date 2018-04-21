@@ -14,7 +14,12 @@ module.exports = {
       query: {
         presets: ['react', 'es2015', 'stage-1']
       }
-    }]
+    },
+  {
+    test: /\.css$/,  
+    include: /node_modules/,  
+    loaders: ['style-loader', 'css-loader']
+  }]
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
@@ -24,6 +29,7 @@ module.exports = {
     contentBase: './',
     headers: {
       'Access-Control-Allow-Origin': 'http://54.151.54.81:8080',
+      // 'Access-Control-Allow-Origin': 'http://localhost:8080',
       'Access-Control-Allow-Credentials': "omit"
     }
   }

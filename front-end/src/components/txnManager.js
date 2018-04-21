@@ -4,6 +4,7 @@ import CreditAmount from './credit';
 import DebitAmount from './debit';
 import TransactionItem from './txnItem';
 import PieChart from 'react-simple-pie-chart';
+import NavBar from './bs-navbar';
 
 class TransactionManager extends Component {
     constructor(props){
@@ -41,9 +42,7 @@ class TransactionManager extends Component {
         }  else {
             outTransactionItems = outTxns.map((txn, index) => {
                 return (
-                    <li>
-                    <TransactionItem key={index} txn={txn} />
-                    </li>
+                    <TransactionItem key={index} rowNum={index+1}  txn={txn} />
                 );
             });
         } 
@@ -55,44 +54,51 @@ class TransactionManager extends Component {
         }  else {
             inTransactionItems = inTxns.map((txn, index) => {
                 return (
-                    <li>
-                    <TransactionItem key={index} txn={txn} />
-                    </li>
+                    <TransactionItem key={index} rowNum={index+1} txn={txn} />
                 );
             });
         } 
         return(
             <div id="txnManager">
-               TransactionManager
+            <br/>
+            <h3 > TransactionManager </h3>
+             <NavBar user={this.props.match.params.user}/> <br/>
+               
+               <br />
                 <CreditAmount /> 
-                <br/>
+                <br/> <br />
                 <DebitAmount /> 
                 <br/>
-                <label>  Outgoing Tansaction History </label> 
-                <div id="txn-history-header"> 
-                    <ul>
-                        <li> ProjectName </li>
-                        <li> Freelancer </li>
-                        <li> Amount in $</li>
-                        <li> Date of Transaction </li>
-                    </ul>
-                </div> <br /> <br/>
-                <ul>
-                {outTransactionItems} 
-                </ul> <br/>
-                <label> Incoming Tansaction History </label> <br/>
-                <div id="txn-history-header"> 
-                    <ul>
-                        <li> ProjectName </li>
-                        <li> Employer </li>
-                        <li> Amount in $</li>
-                        <li> Date of Transaction </li>
-                    </ul>
-                </div> <br /> <br/>
-                <ul>
-                {inTransactionItems} 
-                </ul> <br />
                 <br />
+                <label>  Outgoing Tansaction History </label> 
+                <table className="table">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ProjectName</th>
+                    <th scope="col">Freelancer</th>
+                    <th scope="col">Amount in $ </th>
+                    <th scope="col">Date of Transaction</th>
+                    </tr>
+                </thead>
+                {outTransactionItems} 
+                </table>
+                <br />                
+                <label> Incoming Tansaction History </label> <br/>
+                <table className="table">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">ProjectName</th>
+                    <th scope="col">Employer</th>
+                    <th scope="col">Amount in $ </th>
+                    <th scope="col">Date of Transaction</th>
+                    </tr>
+                </thead>
+                {inTransactionItems} 
+                </table>
+                <br/>
+                <h4> Pie Chart displaying the percentages of Incoming and Outgoing Transactions: </h4> <br/>
                 <div id="pie-chart"> 
                     <PieChart
                         slices={[

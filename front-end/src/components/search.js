@@ -44,6 +44,10 @@ class Search extends Component {
                   initialItems: data,
                   items: data
                 })
+            }).catch(()=>{
+              this.setState({
+                initialItems: [], items: []
+              })
             })
         })
     }
@@ -94,29 +98,29 @@ class Search extends Component {
       const indexOfFirstItem = indexOfLastItem - this.state.itemsPerPage;
      
       var currentItems = [];
+      let projectItems;
 
       if(filteredItems.length >= this.state.itemsPerPage) {
         console.log(`slicing`);
         currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
-      } else {
+      } else if(filteredItems.length < this.state.itemsPerPage && filteredItems.length !== 0 ){
         console.log(`No slicing`);
         currentItems = (filteredItems);
-      }
-
-      // Retrieve each item from the array of Project Items
-      let projectItems;
-      console.log(currentItems);
-      projectItems = currentItems.map((project, index) => {
-          console.log(project)
-          return (
-              <ProjectItem key={index} project={project} user={this.props.user} currentUser = {this.props.currentUser}/>
-          );
-      });
-      
-      if(filteredItems.length === 0) {
+      } else if(filteredItems.length === 0) {
         projectItems = "No items listed under filtered criteria. Please search again."
       }
 
+      if(filteredItems.length !== 0) {
+        // Retrieve each item from the array of Project Items
+        console.log(currentItems);
+        projectItems = currentItems.map((project, index) => {
+            console.log(project)
+            return (
+                <ProjectItem key={index} project={project} user={this.props.user} currentUser = {this.props.currentUser}/>
+            );
+        });
+      }
+      
       // Logic for displaying page numbers
       const pageNumbers = [];
       for (let i = 1; i <= Math.ceil(filteredItems.length / this.state.itemsPerPage); i++) {
@@ -125,7 +129,7 @@ class Search extends Component {
 
       const renderPageNumbers = pageNumbers.map(number => {
           return (
-            <li
+            <li 
               key={number}
               id={number}
               onClick={this.handleClick}
@@ -137,12 +141,12 @@ class Search extends Component {
         
         return (
             <div className="filter-list">
-            <NavigationBar myProjects={this.handleMyProjects} myBids={this.handleMyBids}/> <br />
               <form>
               <fieldset className="form-group">
-              <input type="text" className="form-control form-control-lg" placeholder="Search" onChange={this.filterList}/>
+              <input type="text" className="form-control form-control-lg" placeholder="Search for a project" onChange={this.filterList}/>
               </fieldset>
               </form>
+              <NavigationBar myProjects={this.handleMyProjects} myBids={this.handleMyBids}/> <br />
               <div className="Projects">
               {projectItems}
               </div>

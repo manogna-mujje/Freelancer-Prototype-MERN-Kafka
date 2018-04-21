@@ -5,9 +5,9 @@ import Section1 from './section1';
 class App extends Component {
   render() {
     return (
-        <div className="App">
+      <div className="container">
           <Menu />
-          <Section1 />
+          <img  id ="bg-img" src="Blue.jpg"/>
         </div>
     );
   }

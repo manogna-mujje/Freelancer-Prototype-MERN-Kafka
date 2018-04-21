@@ -6,7 +6,8 @@ import { bindActionCreators } from 'redux';
 import { Login } from './login';
 import { checkSession } from '../actions/index';
 import Search from './search';
-import Menu from './menu' 
+import Menu from './menu' ;
+import NavBar from './bs-navbar';
 
 
 class Home extends Component {
@@ -22,6 +23,7 @@ class Home extends Component {
         this.props.checkSession().then((res)=> {
             this.setState({
                 user: this.props.currentUser.user.firstName,
+                username: this.props.currentUser.user.username,
                 arrived: true
             })
         });
@@ -30,9 +32,9 @@ class Home extends Component {
     render(){
         return (
             <div>
-                <Menu />
-                <h1> Welcome back, {this.state.user} </h1>
-                <h2> Freelance Jobs and Contests </h2>
+                <h2> Hey, {this.state.user} </h2>
+                <h4> Freelance Jobs and Contests </h4>
+                <NavBar user={this.state.username} /> <br/>
                 <div> 
                 { this.props.currentUser && 
                     this.state.arrived &&

@@ -18,7 +18,7 @@ class NavigationBar extends Component {
         return (
             <div className="nav-bar"> 
                 <div className="tab">
-                    <button className="tablinks"  id="dashboard" onClick={this.handleClick}>Dashboard</button>
+                    <button className="tablinks"  id="dashboard" onClick={this.handleClick}>All Projects</button>
                     <button className="tablinks" id="my-projects" onClick={this.props.myProjects}>My Projects</button>
                     <button className="tablinks" id="my-bids" onClick={this.props.myBids}>My Bids</button>
                 </div>
